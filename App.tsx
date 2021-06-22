@@ -1,21 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import Game from './pages/game';
+import Homepage from './pages/homepage';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  const [screen, setScreen] = useState("homepage");
+  const [record, setRecord] = useState(0);
+  
+  function endListener() {
+    setScreen("homepage");
+  }
+
+  function playListener() {
+    setScreen("game");
+  }
+
+  if (screen === "homepage") return <Homepage playListener={playListener}/>
+  return <Game />
+  
+}
