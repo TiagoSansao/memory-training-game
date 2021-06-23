@@ -5,6 +5,18 @@ const {height, width} = Dimensions.get("window");
 
 export default function game() {
 
+  let currentSequenceIndex = 0;
+  let sequence = [];
+
+  for(let i = 0; i < 100; i += 1) {
+    sequence.push(Math.floor(Math.random() * 10));
+  }
+
+  console.log(sequence);
+
+  function pressListener(btnIndex) {
+
+  }
 
   function buttons() {
     let buttonsQuantity = 9;
@@ -17,7 +29,7 @@ export default function game() {
     }
 
     for (let i = 0; i < buttonsQuantity; i += 1) {
-      buttonsArr.push(<Pressable key={`btn${i}`} onPress={() => {}} style={({ pressed }) => [{backgroundColor: pressed ? '#e76f51' : '#e9c46a'}, styles.button]} />)
+      buttonsArr.push(<Pressable key={`btn${i}`} onPress={() => {pressListener(i)}} style={({ pressed }) => [{backgroundColor: pressed ? '#e76f51' : '#e9c46a'}, styles.button]} />)
     }
     
     buttonsWithRowsArr.forEach((row, index) => {
