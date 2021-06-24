@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, Platform, Pressable, Dimensions, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, Platform, Pressable, Dimensions, TouchableHighlight, TouchableOpacity } from 'react-native';
 
 
 const {height, width} = Dimensions.get("window");
@@ -11,7 +11,7 @@ for(let i = 0; i < 100; i += 1) {
 }
 
 
-export default function game() {
+export default function game({endListener}) {
 
   const [currentHIghlightedButton, setCurrentHighlightedButton] = useState(null);
   const [playerTime, setPlayerTime] = useState(false);
@@ -28,9 +28,6 @@ export default function game() {
   }, [])
 
   async function highlightSequence(newCurrentSequenceIndex) {
-    
-    setPlayerTime(false);
-
     for (let i = 0; i < newCurrentSequenceIndex; i += 1) {
       console.log('aqui')
       await timer(100);
@@ -44,14 +41,25 @@ export default function game() {
     setPlayerTime(true);
   }
 
+  function lostGame() {
+    setGameState("lost");
+    setPlayerTime(false);
+  }
+
+  function startNewGame() {
+    setCurrentSequenceIndex(1);
+    setGameState("in-game");
+    setPlayerTime(true);
+  }
   
   function pressListener(btnIndex) {
     if (playerTime !== true) return;
     const newPlayerSequence = [...playerSequence, btnIndex];
     setPlayerSequence(newPlayerSequence);
     newPlayerSequence.forEach( async (playerValue, index) => {
-      if (playerValue !== sequence[index]) return setGameState("lost") // ADD RESET HERE
+      if (playerValue !== sequence[index]) return lostGame() // ADD RESET HERE
       if (index + 1  === currentSequenceIndex) { 
+        setPlayerTime(false);
         console.log('Next level')
         let newCurrentSequenceIndex = currentSequenceIndex + 1;
         setCurrentSequenceIndex(newCurrentSequenceIndex);
@@ -89,10 +97,14 @@ export default function game() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.lostScreen}>
-          <Text style={styles.lostTextH1}>You Lost</Text>
-          <Text>Score: {currentSequenceIndex}</Text>
+          <Text style={styles.lostTextH1}>YOU GOT{"\n"}{currentSequenceIndex} POINTS!</Text>
+          <View style={styles.endScreenButtonsView}>
+            <TouchableOpacity onPress={startNewGame} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>TRY AGAIN</Text></TouchableOpacity>
+            <TouchableOpacity onPress={endListener} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>HOME</Text></TouchableOpacity>
+          </View>
+          <Text>Your record: {currentSequenceIndex}</Text>
         </View>
-        <Text>Pijas</Text>
+        <View style={styles.heading}><Text style={styles.title}>MEMORY TRAINING</Text></View>
         <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
           return <View key={index} style={styles.row}>{rowArr}</View>
         }))}</View>
@@ -102,7 +114,7 @@ export default function game() {
 
   return (
   <SafeAreaView style={styles.container}>
-    <Text style={styles.title}>MEMORY TRAINING</Text>
+    <View style={styles.heading}><Text style={styles.title}>MEMORY TRAINING</Text></View>
     <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
       return <View key={index} style={styles.row}>{rowArr}</View>
     }))}</View>
@@ -111,6 +123,9 @@ export default function game() {
 };
 
 const styles = StyleSheet.create({
+  heading: {
+    height: 100,
+  },
   container: {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     backgroundColor: '#fff',
@@ -118,6 +133,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2a9d8f',
     width: width,
     height: height,
+    position: 'relative',
   },
   button: {
     flex: 1,
@@ -142,12 +158,20 @@ const styles = StyleSheet.create({
   },
   lostScreen: {
     position: 'absolute',
-    top: "50%",
-    left: "50%",
-    
+    alignSelf: 'center',
+    top: 100,
+    zIndex: 10,
+    width: width*0.80,
+    height: width*0.80,
+    opacity: 0.9,
+    backgroundColor: 'black',
   },
   lostTextH1: {
     fontFamily: 'press-start',
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 25,
+    marginTop: 30,
   },
   title: {
     fontFamily: 'press-start',
@@ -157,5 +181,23 @@ const styles = StyleSheet.create({
     color: 'white',
     textShadowColor: 'black',
     textShadowRadius: 10,
+  },
+  endScreenButtonsView: {
+    marginTop: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+
+  },
+  endScreenButton: {
+    backgroundColor: 'white',
+    width: 120,
+    height: 40,
+    justifyContent: 'center',
+    paddingTop: 5,
+    borderRadius: 0,
+  },
+  endScreenButtonTxt: {
+    textAlign: 'center',
+    fontFamily: 'press-start',
   },
 })

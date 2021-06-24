@@ -32,6 +32,6 @@ export default function App() {
   }
 
   if (screen === "homepage") return <Homepage playListener={playListener}/>
-  return <Game />
+  return <Game endListener={endListener}/>
   
 }
