@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, Platform, Pressable, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, Platform, Pressable, Dimensions, TouchableHighlight } from 'react-native';
 
 const {height, width} = Dimensions.get("window");
 const sequence = [];
@@ -16,6 +16,7 @@ export default function game() {
   const [playerTime, setPlayerTime] = useState(false);
   const [currentSequenceIndex, setCurrentSequenceIndex] = useState(1);
   const [playerSequence, setPlayerSequence] = useState([]);
+  const [gameState, setGameState] = useState("in-game");
 
   useEffect(() => {
     setCurrentHighlightedButton(sequence[0]);
@@ -47,14 +48,15 @@ export default function game() {
     if (playerTime !== true) return;
     const newPlayerSequence = [...playerSequence, btnIndex];
     setPlayerSequence(newPlayerSequence);
-    newPlayerSequence.forEach((playerValue, index) => {
+    newPlayerSequence.forEach( async (playerValue, index) => {
       if (playerValue !== sequence[index]) return console.log('errou') // ADD RESET HERE
       if (index + 1  === currentSequenceIndex) { 
         console.log('Next level')
         let newCurrentSequenceIndex = currentSequenceIndex + 1;
         setCurrentSequenceIndex(newCurrentSequenceIndex);
-        highlightSequence(newCurrentSequenceIndex);
         setPlayerSequence([]);
+        await timer(1000);
+        highlightSequence(newCurrentSequenceIndex);
       }
     })
   }
@@ -70,7 +72,7 @@ export default function game() {
     }
 
     for (let i = 0; i < buttonsQuantity; i += 1) {
-      buttonsArr.push(<Pressable disabled={!playerTime} key={`btn${i}`} onPress={(event) => {pressListener(i)}} style={[{backgroundColor: i === currentHIghlightedButton ? '#e76f51' : '#e9c46a' }, styles.button]} />)
+      buttonsArr.push(<TouchableHighlight underlayColor="#4361ee" disabled={!playerTime} key={`btn${i}`} onPress={() => {pressListener(i)}} style={[{backgroundColor: i === currentHIghlightedButton ? '#e76f51' : '#e9c46a' }, styles.button]} ><Text></Text></TouchableHighlight>)
     }
     
     buttonsWithRowsArr.forEach((row, index) => {
@@ -82,8 +84,19 @@ export default function game() {
     return buttonsWithRowsArr;
   }
 
-  if (playerTime === false) {
-
+  if (gameState === "lost") {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.lostScreen}>
+          <Text>You Lost</Text>
+          <Text>Score: {currentSequenceIndex}</Text>
+        </View>
+        <Text>Pijas</Text>
+        <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
+          return <View key={index} style={styles.row}>{rowArr}</View>
+        }))}</View>
+      </SafeAreaView>
+      )
   }
 
   return (
@@ -125,5 +138,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around'
+  },
+  lostScreen: {
+    position: 'absolute',
   },
 })
