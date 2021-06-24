@@ -24,15 +24,19 @@ export default function game() {
     setPlayerSequence([]);
   }, [])
 
-  function highlightSequence(newCurrentSequenceIndex) {
+  async function highlightSequence(newCurrentSequenceIndex) {
+    const timer = (ms) => new Promise((res) => setTimeout(res, ms));
     setPlayerTime(false);
     for (let i = 0; i < newCurrentSequenceIndex; i += 1) {
       console.log('aqui')
+      await timer(100);
       setCurrentHighlightedButton(sequence[i]);
-      setTimeout(() => {
-        setCurrentHighlightedButton(null);
-      }, 500)
       
+      await timer(500);
+      setCurrentHighlightedButton(null);
+      console.log(i);
+      
+      setPlayerTime(true);
     }
   }
 
@@ -44,10 +48,11 @@ export default function game() {
     newPlayerSequence.forEach((playerValue, index) => {
       if (playerValue !== sequence[index]) return console.log('errou') // ADD RESET HERE
       if (index + 1  === currentSequenceIndex) { 
-        console.log('chego')
+        console.log('Next level')
         let newCurrentSequenceIndex = currentSequenceIndex + 1;
         setCurrentSequenceIndex(newCurrentSequenceIndex);
         highlightSequence(newCurrentSequenceIndex);
+        setPlayerSequence([]);
       }
     })
   }
