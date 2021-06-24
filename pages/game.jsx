@@ -18,29 +18,37 @@ export default function game() {
 
   useEffect(() => {
     setCurrentHighlightedButton(sequence[0]);
-    setTimeout(() => {setCurrentHighlightedButton(null)}, 100);
+    setTimeout(() => {
+      setCurrentHighlightedButton(null)}, 500);
     setPlayerTime(true);
     setPlayerSequence([]);
   }, [])
 
-  function highlightSequence() {
-    for (let i = 0; i < currentSequenceIndex; i += 1) {
-      console.log(sequence[i]);
+  function highlightSequence(newCurrentSequenceIndex) {
+    setPlayerTime(false);
+    for (let i = 0; i < newCurrentSequenceIndex; i += 1) {
+      console.log('aqui')
       setCurrentHighlightedButton(sequence[i]);
+      setTimeout(() => {
+        setCurrentHighlightedButton(null);
+      }, 500)
+      
     }
   }
 
   
   function pressListener(btnIndex) {
-    console.log('sim');
     if (playerTime !== true) return;
-    console.log(typeof playerSequence);
-    const newPlayerSequence = [...playerSequence].push(btnIndex);
+    const newPlayerSequence = [...playerSequence, btnIndex];
     setPlayerSequence(newPlayerSequence);
     newPlayerSequence.forEach((playerValue, index) => {
-      console.log(newPlayerSequence);
-      if (playerValue === sequence[index]) return console.log('certo');
-      console.log('perdeu');
+      if (playerValue !== sequence[index]) return console.log('errou') // ADD RESET HERE
+      if (index + 1  === currentSequenceIndex) { 
+        console.log('chego')
+        let newCurrentSequenceIndex = currentSequenceIndex + 1;
+        setCurrentSequenceIndex(newCurrentSequenceIndex);
+        highlightSequence(newCurrentSequenceIndex);
+      }
     })
   }
 
