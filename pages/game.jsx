@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, StatusBar, Platform, Pressable, D
 
 const {height, width} = Dimensions.get("window");
 const sequence = [];
+const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
 for(let i = 0; i < 100; i += 1) {
   sequence.push(Math.floor(Math.random() * 10));
@@ -25,8 +26,9 @@ export default function game() {
   }, [])
 
   async function highlightSequence(newCurrentSequenceIndex) {
-    const timer = (ms) => new Promise((res) => setTimeout(res, ms));
+    
     setPlayerTime(false);
+
     for (let i = 0; i < newCurrentSequenceIndex; i += 1) {
       console.log('aqui')
       await timer(100);
@@ -36,8 +38,8 @@ export default function game() {
       setCurrentHighlightedButton(null);
       console.log(i);
       
-      setPlayerTime(true);
     }
+    setPlayerTime(true);
   }
 
   
@@ -68,7 +70,7 @@ export default function game() {
     }
 
     for (let i = 0; i < buttonsQuantity; i += 1) {
-      buttonsArr.push(<Pressable key={`btn${i}`} onPress={(event) => {pressListener(i)}} style={[{backgroundColor: i === currentHIghlightedButton ? '#e76f51' : '#e9c46a' }, styles.button]} />)
+      buttonsArr.push(<Pressable disabled={!playerTime} key={`btn${i}`} onPress={(event) => {pressListener(i)}} style={[{backgroundColor: i === currentHIghlightedButton ? '#e76f51' : '#e9c46a' }, styles.button]} />)
     }
     
     buttonsWithRowsArr.forEach((row, index) => {
