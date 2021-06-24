@@ -1,21 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, Platform, Pressable, Dimensions } from 'react-native';
 
 const {height, width} = Dimensions.get("window");
+const sequence = [];
+
+for(let i = 0; i < 100; i += 1) {
+  sequence.push(Math.floor(Math.random() * 10));
+}
+
 
 export default function game() {
 
-  let currentSequenceIndex = 0;
-  let sequence = [];
+  const [currentHIghlightedButton, setCurrentHighlightedButton] = useState(null);
+  const [playerTime, setPlayerTime] = useState(false);
+  const [currentSequenceIndex, setCurrentSequenceIndex] = useState(1);
+  const [playerSequence, setPlayerSequence] = useState([]);
 
-  for(let i = 0; i < 100; i += 1) {
-    sequence.push(Math.floor(Math.random() * 10));
+  useEffect(() => {
+    setCurrentHighlightedButton(sequence[0]);
+    setTimeout(() => {setCurrentHighlightedButton(null)}, 100);
+    setPlayerTime(true);
+    setPlayerSequence([]);
+  }, [])
+
+  function highlightSequence() {
+    for (let i = 0; i < currentSequenceIndex; i += 1) {
+      console.log(sequence[i]);
+      setCurrentHighlightedButton(sequence[i]);
+    }
   }
 
-  console.log(sequence);
-
+  
   function pressListener(btnIndex) {
-
+    console.log('sim');
+    if (playerTime !== true) return;
+    console.log(typeof playerSequence);
+    const newPlayerSequence = [...playerSequence].push(btnIndex);
+    setPlayerSequence(newPlayerSequence);
+    newPlayerSequence.forEach((playerValue, index) => {
+      console.log(newPlayerSequence);
+      if (playerValue === sequence[index]) return console.log('certo');
+      console.log('perdeu');
+    })
   }
 
   function buttons() {
@@ -29,7 +55,7 @@ export default function game() {
     }
 
     for (let i = 0; i < buttonsQuantity; i += 1) {
-      buttonsArr.push(<Pressable key={`btn${i}`} onPress={() => {pressListener(i)}} style={({ pressed }) => [{backgroundColor: pressed ? '#e76f51' : '#e9c46a'}, styles.button]} />)
+      buttonsArr.push(<Pressable key={`btn${i}`} onPress={(event) => {pressListener(i)}} style={[{backgroundColor: i === currentHIghlightedButton ? '#e76f51' : '#e9c46a' }, styles.button]} />)
     }
     
     buttonsWithRowsArr.forEach((row, index) => {
@@ -39,6 +65,10 @@ export default function game() {
     });
     
     return buttonsWithRowsArr;
+  }
+
+  if (playerTime === false) {
+
   }
 
   return (
