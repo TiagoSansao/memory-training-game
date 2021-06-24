@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, Platform, Pressable, Dimensions, TouchableHighlight } from 'react-native';
 
+
 const {height, width} = Dimensions.get("window");
 const sequence = [];
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -49,7 +50,7 @@ export default function game() {
     const newPlayerSequence = [...playerSequence, btnIndex];
     setPlayerSequence(newPlayerSequence);
     newPlayerSequence.forEach( async (playerValue, index) => {
-      if (playerValue !== sequence[index]) return console.log('errou') // ADD RESET HERE
+      if (playerValue !== sequence[index]) return setGameState("lost") // ADD RESET HERE
       if (index + 1  === currentSequenceIndex) { 
         console.log('Next level')
         let newCurrentSequenceIndex = currentSequenceIndex + 1;
@@ -75,7 +76,7 @@ export default function game() {
       buttonsArr.push(<TouchableHighlight underlayColor="#4361ee" disabled={!playerTime} key={`btn${i}`} onPress={() => {pressListener(i)}} style={[{backgroundColor: i === currentHIghlightedButton ? '#e76f51' : '#e9c46a' }, styles.button]} ><Text></Text></TouchableHighlight>)
     }
     
-    buttonsWithRowsArr.forEach((row, index) => {
+    buttonsWithRowsArr.forEach((row) => {
       for (let i = 0; i < RowQuantity; i += 1) {
         row.push(buttonsArr.shift())
       }
@@ -88,7 +89,7 @@ export default function game() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.lostScreen}>
-          <Text>You Lost</Text>
+          <Text style={styles.lostTextH1}>You Lost</Text>
           <Text>Score: {currentSequenceIndex}</Text>
         </View>
         <Text>Pijas</Text>
@@ -101,7 +102,7 @@ export default function game() {
 
   return (
   <SafeAreaView style={styles.container}>
-    <Text>Pijas</Text>
+    <Text style={styles.title}>MEMORY TRAINING</Text>
     <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
       return <View key={index} style={styles.row}>{rowArr}</View>
     }))}</View>
@@ -141,5 +142,20 @@ const styles = StyleSheet.create({
   },
   lostScreen: {
     position: 'absolute',
+    top: "50%",
+    left: "50%",
+    
+  },
+  lostTextH1: {
+    fontFamily: 'press-start',
+  },
+  title: {
+    fontFamily: 'press-start',
+    fontSize: 35,
+    textAlign: 'center',
+    marginTop: 20,
+    color: 'white',
+    textShadowColor: 'black',
+    textShadowRadius: 10,
   },
 })

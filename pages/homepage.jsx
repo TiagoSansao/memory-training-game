@@ -5,7 +5,7 @@ export default function homepage({playListener}) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.heading}>
-        <Text>Memory Training</Text>
+        <Text style={styles.title}>Memory Training</Text>
       </View>
       <View>
         <TouchableOpacity onPress={playListener} style={styles.playButton} >
@@ -29,5 +29,8 @@ const styles = StyleSheet.create({
   },
   playButton: {
 
+  },
+  title: {
+    fontFamily: 'press-start'
   },
 });
