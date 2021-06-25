@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { Audio } from 'expo-av'
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, Platform, Pressable, Dimensions, TouchableHighlight, TouchableOpacity } from 'react-native';
 
 
 const {height, width} = Dimensions.get("window");
-const sequence = [];
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
-
-for(let i = 0; i < 100; i += 1) {
-  sequence.push(Math.floor(Math.random() * 10));
-}
-
 
 export default function game({endListener}) {
 
@@ -18,25 +13,36 @@ export default function game({endListener}) {
   const [currentSequenceIndex, setCurrentSequenceIndex] = useState(1);
   const [playerSequence, setPlayerSequence] = useState([]);
   const [gameState, setGameState] = useState("in-game");
+  const [sound, setSound] = useState(); 
+  const [sequence, setSequence] = useState([]);
 
   useEffect(() => {
-    setCurrentHighlightedButton(sequence[0]);
-    setTimeout(() => {
-      setCurrentHighlightedButton(null)}, 500);
-    setPlayerTime(true);
-    setPlayerSequence([]);
+    startNewGame();
   }, [])
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync(); }
+      : undefined;
+  }, [sound]);
+
+  /*async function playAudio() {
+    const { sound } = await Audio.Sound.createAsync(
+      require('../assets/sounds/playButton.mp3')
+    )
+    setSound(sound);
+    console.log('playing')
+    await sound.playAsync();
+  }*/
+  
 
   async function highlightSequence(newCurrentSequenceIndex) {
     for (let i = 0; i < newCurrentSequenceIndex; i += 1) {
-      console.log('aqui')
       await timer(100);
       setCurrentHighlightedButton(sequence[i]);
-      
       await timer(500);
       setCurrentHighlightedButton(null);
-      console.log(i);
-      
     }
     setPlayerTime(true);
   }
@@ -47,17 +53,27 @@ export default function game({endListener}) {
   }
 
   function startNewGame() {
+    const localSequence = [];
+    for(let i = 0; i < 100; i += 1) {
+      localSequence.push(Math.floor(Math.random() * 10)); // generate seqyebce
+    }
+    setSequence(localSequence);
     setCurrentSequenceIndex(1);
     setGameState("in-game");
     setPlayerTime(true);
+    setCurrentHighlightedButton(localSequence[0]);
+    setPlayerSequence([]);
+    setTimeout(() => {
+      setCurrentHighlightedButton(null)}, 500);
   }
   
   function pressListener(btnIndex) {
     if (playerTime !== true) return;
+    //playAudio();
     const newPlayerSequence = [...playerSequence, btnIndex];
     setPlayerSequence(newPlayerSequence);
     newPlayerSequence.forEach( async (playerValue, index) => {
-      if (playerValue !== sequence[index]) return lostGame() // ADD RESET HERE
+      if (playerValue !== sequence[index]) return lostGame();
       if (index + 1  === currentSequenceIndex) { 
         setPlayerTime(false);
         console.log('Next level')
