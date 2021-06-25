@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Audio } from 'expo-av'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, Platform, Pressable, Dimensions, TouchableHighlight, TouchableOpacity, Alert } from 'react-native';
 
 
@@ -8,6 +9,8 @@ const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
 export default function game({endListener}) {
 
+  //AsyncStorage.clear();
+
   const [currentHIghlightedButton, setCurrentHighlightedButton] = useState(null);
   const [playerTime, setPlayerTime] = useState(false);
   const [currentSequenceIndex, setCurrentSequenceIndex] = useState(1);
@@ -15,8 +18,10 @@ export default function game({endListener}) {
   const [gameState, setGameState] = useState("in-game");
   const [sound, setSound] = useState(); 
   const [sequence, setSequence] = useState([]);
+  const [rateOurAppPreference, setRateOurAppPreference] = useState(true);
 
   useEffect(() => {
+    retrieveDataFromStorage();
     startNewGame();
   }, [])
 
@@ -26,6 +31,27 @@ export default function game({endListener}) {
           sound.unloadAsync(); }
       : undefined;
   }, [sound]);
+
+  const retrieveDataFromStorage = async () => {
+    try {
+      const rateOurAppAnswer = await AsyncStorage.getItem('rateOurAppAnswer');
+      if (rateOurAppAnswer === null) return;
+      if (rateOurAppAnswer === "never") setRateOurAppPreference(false);
+      else setRateOurAppPreference(true);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const setDataInStorage = async (answer) => {
+    try {
+      if (answer !== "never" && answer !== "ok") return;
+      await AsyncStorage.setItem('rateOurAppAnswer', 'never')
+      setRateOurAppPreference(false);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   /*async function playAudio() {
     const { sound } = await Audio.Sound.createAsync(
@@ -110,20 +136,22 @@ export default function game({endListener}) {
   }
 
   if (gameState === "lost") {
-    Alert.alert("Rate our app", "Could you rate our APP on Google Play Store? We'd be glad to know your opinion!", [
-      {
-        text: "Ok",
-        onPress: () => {console.log('ok');}
-      },
-      {
-        text: "Later",
-        onPress: () => {console.log('later');}
-      },
-      {
-        text: "Never ask again",
-        onPress: () => {console.log('never')}
-      }
-    ])
+    if (rateOurAppPreference === true) {
+      Alert.alert("Rate our app", "Could you rate our APP on Google Play Store? We'd be glad to know your opinion!", [
+        {
+          text: "Ok",
+          onPress: () => {setDataInStorage("ok")}
+        },
+        {
+          text: "Later",
+          onPress: () => {setDataInStorage("later")}
+        },
+        {
+          text: "Never ask again",
+          onPress: () => {setDataInStorage("never")}
+        }
+      ])
+    }
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.lostScreen}>
