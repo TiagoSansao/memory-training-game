@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Audio } from 'expo-av'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Linking from 'expo-linking';
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, Platform, Pressable, Dimensions, TouchableHighlight, TouchableOpacity, Alert } from 'react-native';
 
 
@@ -31,6 +32,13 @@ export default function game({endListener}) {
           sound.unloadAsync(); }
       : undefined;
   }, [sound]);
+
+
+  function sim() {
+    Linking.openURL("https://play.google.com/store/apps/details?id=com.tiagosansao.convertcase");
+  }
+
+  sim();
 
   const retrieveDataFromStorage = async () => {
     try {
@@ -76,6 +84,7 @@ export default function game({endListener}) {
   function lostGame() {
     setGameState("lost");
     setPlayerTime(false);
+    askReview();
   }
 
   function startNewGame() {
