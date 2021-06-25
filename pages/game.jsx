@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Audio } from 'expo-av'
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, Platform, Pressable, Dimensions, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, Platform, Pressable, Dimensions, TouchableHighlight, TouchableOpacity, Alert } from 'react-native';
 
 
 const {height, width} = Dimensions.get("window");
@@ -62,6 +62,7 @@ export default function game({endListener}) {
     setGameState("in-game");
     setPlayerTime(true);
     setCurrentHighlightedButton(localSequence[0]);
+    //playAudio();
     setPlayerSequence([]);
     setTimeout(() => {
       setCurrentHighlightedButton(null)}, 500);
@@ -69,7 +70,6 @@ export default function game({endListener}) {
   
   function pressListener(btnIndex) {
     if (playerTime !== true) return;
-    //playAudio();
     const newPlayerSequence = [...playerSequence, btnIndex];
     setPlayerSequence(newPlayerSequence);
     newPlayerSequence.forEach( async (playerValue, index) => {
@@ -110,6 +110,20 @@ export default function game({endListener}) {
   }
 
   if (gameState === "lost") {
+    Alert.alert("Rate our app", "Could you rate our APP on Google Play Store? We'd be glad to know your opinion!", [
+      {
+        text: "Ok",
+        onPress: () => {console.log('ok');}
+      },
+      {
+        text: "Later",
+        onPress: () => {console.log('later');}
+      },
+      {
+        text: "Never ask again",
+        onPress: () => {console.log('never')}
+      }
+    ])
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.lostScreen}>
