@@ -20,6 +20,7 @@ export default function game({endListener}) {
   const [sound, setSound] = useState(); 
   const [sequence, setSequence] = useState([]);
   const [rateOurAppPreference, setRateOurAppPreference] = useState(true);
+  const [record, setRecord] = useState(0);
 
   useEffect(() => {
     retrieveDataFromStorage();
@@ -33,17 +34,13 @@ export default function game({endListener}) {
       : undefined;
   }, [sound]);
 
-
-  function sim() {
-    Linking.openURL("https://play.google.com/store/apps/details?id=com.tiagosansao.convertcase");
-  }
-
-  sim();
-
   const retrieveDataFromStorage = async () => {
     try {
       const rateOurAppAnswer = await AsyncStorage.getItem('rateOurAppAnswer');
-      if (rateOurAppAnswer === null) return;
+      const storedRecord = await AsyncStorage.getItem('record'); 
+
+      if (storedRecord !== null) setRecord(storedRecord);
+
       if (rateOurAppAnswer === "never") setRateOurAppPreference(false);
       else setRateOurAppPreference(true);
     } catch (e) {
@@ -51,11 +48,17 @@ export default function game({endListener}) {
     }
   }
 
-  const setDataInStorage = async (answer) => {
+  const setDataInStorage = async (answer, record) => {
     try {
-      if (answer !== "never" && answer !== "ok") return;
-      await AsyncStorage.setItem('rateOurAppAnswer', 'never')
-      setRateOurAppPreference(false);
+      if (answer) {
+        if (answer !== "never" && answer !== "ok") return;
+        await AsyncStorage.setItem('rateOurAppAnswer', 'never')
+        setRateOurAppPreference(false);
+      }
+      else if (record) {
+        await AsyncStorage.setItem('record', record.toString());
+        setRecord(record);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -84,7 +87,10 @@ export default function game({endListener}) {
   function lostGame() {
     setGameState("lost");
     setPlayerTime(false);
-    askReview();
+    if (currentSequenceIndex > record) {
+      setDataInStorage(null, currentSequenceIndex);
+      console.log('new record');
+    }
   }
 
   function startNewGame() {
@@ -137,7 +143,7 @@ export default function game({endListener}) {
     
     buttonsWithRowsArr.forEach((row) => {
       for (let i = 0; i < RowQuantity; i += 1) {
-        row.push(buttonsArr.shift())
+        row.push(buttonsArr.shift());
       }
     });
     
@@ -149,7 +155,10 @@ export default function game({endListener}) {
       Alert.alert("Rate our app", "Could you rate our APP on Google Play Store? We'd be glad to know your opinion!", [
         {
           text: "Ok",
-          onPress: () => {setDataInStorage("ok")}
+          onPress: async () => {
+            await setDataInStorage("ok");
+            Linking.openURL("https://play.google.com/store/apps/details?id=com.tiagosansao.convertcase");
+          }
         },
         {
           text: "Later",
@@ -169,7 +178,10 @@ export default function game({endListener}) {
             <TouchableOpacity onPress={startNewGame} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>TRY AGAIN</Text></TouchableOpacity>
             <TouchableOpacity onPress={endListener} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>HOME</Text></TouchableOpacity>
           </View>
-          <Text>Your record: {currentSequenceIndex}</Text>
+          <View style={styles.dataDisplay}>
+            <Text style={styles.lostTextH2}>Record: {record}</Text>
+            <Text style={styles.lostTextH2}>Rank: #{record}</Text>
+          </View>
         </View>
         <View style={styles.heading}><Text style={styles.title}>MEMORY TRAINING</Text></View>
         <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
@@ -240,6 +252,14 @@ const styles = StyleSheet.create({
     fontSize: 25,
     marginTop: 30,
   },
+  lostTextH2: {
+    fontFamily: 'press-start',
+    color: 'white',
+    textAlign: 'left',
+    fontSize: 15,
+    marginLeft: 20,
+    
+  },
   title: {
     fontFamily: 'press-start',
     fontSize: 35,
@@ -266,5 +286,8 @@ const styles = StyleSheet.create({
   endScreenButtonTxt: {
     textAlign: 'center',
     fontFamily: 'press-start',
+  },
+  dataDisplay: {
+    marginTop: 30,
   },
 })
