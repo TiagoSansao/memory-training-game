@@ -52,6 +52,7 @@ export default StyleSheet.create({
     textAlign: 'center',
     fontSize: 25,
     marginTop: 30,
+    lineHeight: 35,
   },
   lostTextH2: {
     fontFamily: 'press-start',

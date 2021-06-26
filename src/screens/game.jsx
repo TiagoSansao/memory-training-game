@@ -9,6 +9,9 @@ const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
 export default function game({endListener}) {
 
+
+  //AsyncStorage.clear(); // For test purposes
+
   // --------------
 
   const [currentHIghlightedButton, setCurrentHighlightedButton] = useState(null);
@@ -20,6 +23,7 @@ export default function game({endListener}) {
   const [sequence, setSequence] = useState([]);
   const [rateOurAppPreference, setRateOurAppPreference] = useState(true);
   const [record, setRecord] = useState(0);
+  const [lostTextH1, setLostTextH1] = useState("YOU GOT");
 
   // --------------
 
@@ -95,7 +99,26 @@ export default function game({endListener}) {
     setPlayerTime(false);
     if (currentSequenceIndex > record) {
       setDataInStorage(null, currentSequenceIndex);
-      console.log('new record');
+      setLostTextH1("NEW RECORD")
+      if (rateOurAppPreference === true) {
+        Alert.alert("Rate our app", "Could you rate our APP on Google Play Store? We'd be glad to know your opinion!", [
+          {
+            text: "Ok",
+            onPress: async () => {
+              await setDataInStorage("ok");
+              Linking.openURL("https://play.google.com/store/apps/details?id=com.tiagosansao.convertcase");
+            }
+          },
+          {
+            text: "Later",
+            onPress: () => {setDataInStorage("later")}
+          },
+          {
+            text: "Never ask again",
+            onPress: () => {setDataInStorage("never")}
+          }
+        ])
+      }
     }
   }
 
@@ -110,6 +133,7 @@ export default function game({endListener}) {
     setPlayerTime(true);
     setCurrentHighlightedButton(localSequence[0]);
     //playAudio();
+    setLostTextH1("YOU GOT");
     setPlayerSequence([]);
     setTimeout(() => {
       setCurrentHighlightedButton(null)}, 500);
@@ -159,29 +183,10 @@ export default function game({endListener}) {
   // --------------
 
   if (gameState === "lost") {
-    if (rateOurAppPreference === true) {
-      Alert.alert("Rate our app", "Could you rate our APP on Google Play Store? We'd be glad to know your opinion!", [
-        {
-          text: "Ok",
-          onPress: async () => {
-            await setDataInStorage("ok");
-            Linking.openURL("https://play.google.com/store/apps/details?id=com.tiagosansao.convertcase");
-          }
-        },
-        {
-          text: "Later",
-          onPress: () => {setDataInStorage("later")}
-        },
-        {
-          text: "Never ask again",
-          onPress: () => {setDataInStorage("never")}
-        }
-      ])
-    }
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.lostScreen}>
-          <Text style={styles.lostTextH1}>YOU GOT{"\n"}{currentSequenceIndex} POINTS!</Text>
+          <Text style={styles.lostTextH1}>{lostTextH1}{"\n"}{currentSequenceIndex} POINTS!</Text>
           <View style={styles.endScreenButtonsView}>
             <TouchableOpacity onPress={startNewGame} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>TRY AGAIN</Text></TouchableOpacity>
             <TouchableOpacity onPress={endListener} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>HOME</Text></TouchableOpacity>
