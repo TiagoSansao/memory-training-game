@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import Game from './pages/game';
-import Homepage from './pages/homepage';
+import Game from './src/screens/game';
+import Homepage from './src/screens/home';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 
 const fetchFonts = () => {
   return Font.loadAsync({
-    'press-start': require('./assets/fonts/PressStart2P-Regular.ttf')
+    'press-start': require('./src/assets/fonts/PressStart2P-Regular.ttf')
   })
 }
 

@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Audio } from 'expo-av'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Linking from 'expo-linking';
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, Platform, Pressable, Dimensions, TouchableHighlight, TouchableOpacity, Alert } from 'react-native';
+import styles from '../styles/gameStyles';
+import { Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert } from 'react-native';
 
-
-const {height, width} = Dimensions.get("window");
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
 export default function game({endListener}) {
 
-  //AsyncStorage.clear();
+  // --------------
 
   const [currentHIghlightedButton, setCurrentHighlightedButton] = useState(null);
   const [playerTime, setPlayerTime] = useState(false);
@@ -21,6 +20,8 @@ export default function game({endListener}) {
   const [sequence, setSequence] = useState([]);
   const [rateOurAppPreference, setRateOurAppPreference] = useState(true);
   const [record, setRecord] = useState(0);
+
+  // --------------
 
   useEffect(() => {
     retrieveDataFromStorage();
@@ -33,6 +34,8 @@ export default function game({endListener}) {
           sound.unloadAsync(); }
       : undefined;
   }, [sound]);
+
+  // --------------
 
   const retrieveDataFromStorage = async () => {
     try {
@@ -64,6 +67,8 @@ export default function game({endListener}) {
     }
   }
 
+  // --------------
+
   /*async function playAudio() {
     const { sound } = await Audio.Sound.createAsync(
       require('../assets/sounds/playButton.mp3')
@@ -73,6 +78,7 @@ export default function game({endListener}) {
     await sound.playAsync();
   }*/
   
+  // --------------
 
   async function highlightSequence(newCurrentSequenceIndex) {
     for (let i = 0; i < newCurrentSequenceIndex; i += 1) {
@@ -138,7 +144,7 @@ export default function game({endListener}) {
     }
 
     for (let i = 0; i < buttonsQuantity; i += 1) {
-      buttonsArr.push(<TouchableHighlight underlayColor="#4361ee" disabled={!playerTime} key={`btn${i}`} onPress={() => {pressListener(i)}} style={[{backgroundColor: i === currentHIghlightedButton ? '#e76f51' : '#e9c46a' }, styles.button]} ><Text></Text></TouchableHighlight>)
+      buttonsArr.push(<TouchableHighlight underlayColor="#e82c39" disabled={!playerTime} key={`btn${i}`} onPress={() => {pressListener(i)}} style={[{backgroundColor: i === currentHIghlightedButton ? '#1deef2' : '#be0dd9' }, styles.button]} ><Text></Text></TouchableHighlight>)
     }
     
     buttonsWithRowsArr.forEach((row) => {
@@ -149,6 +155,8 @@ export default function game({endListener}) {
     
     return buttonsWithRowsArr;
   }
+
+  // --------------
 
   if (gameState === "lost") {
     if (rateOurAppPreference === true) {
@@ -181,6 +189,7 @@ export default function game({endListener}) {
           <View style={styles.dataDisplay}>
             <Text style={styles.lostTextH2}>Record: {record}</Text>
             <Text style={styles.lostTextH2}>Rank: #{record}</Text>
+            <Text style={styles.lostTextH2}>Rank: #{record}</Text>
           </View>
         </View>
         <View style={styles.heading}><Text style={styles.title}>MEMORY TRAINING</Text></View>
@@ -194,6 +203,7 @@ export default function game({endListener}) {
   return (
   <SafeAreaView style={styles.container}>
     <View style={styles.heading}><Text style={styles.title}>MEMORY TRAINING</Text></View>
+    <View style={[styles.statusLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}><View style={styles.statusGeometric}></View></View>
     <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
       return <View key={index} style={styles.row}>{rowArr}</View>
     }))}</View>
@@ -201,93 +211,3 @@ export default function game({endListener}) {
   )
 };
 
-const styles = StyleSheet.create({
-  heading: {
-    height: 100,
-  },
-  container: {
-    marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    backgroundColor: '#fff',
-    flexDirection: 'column',
-    backgroundColor: '#2a9d8f',
-    width: width,
-    height: height,
-    position: 'relative',
-  },
-  button: {
-    flex: 1,
-    margin: 5,
-  },
-  btnContainer: {
-    display: 'flex',
-    width: width * 0.80,
-    height: width *0.80,
-    justifyContent: 'space-around',
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-    alignSelf: 'center',
-    backgroundColor: '#264653',
-    padding: 5,
-  },
-  row: {
-    flexGrow: 1,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around'
-  },
-  lostScreen: {
-    position: 'absolute',
-    alignSelf: 'center',
-    top: 100,
-    zIndex: 10,
-    width: width*0.80,
-    height: width*0.80,
-    opacity: 0.9,
-    backgroundColor: 'black',
-  },
-  lostTextH1: {
-    fontFamily: 'press-start',
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 25,
-    marginTop: 30,
-  },
-  lostTextH2: {
-    fontFamily: 'press-start',
-    color: 'white',
-    textAlign: 'left',
-    fontSize: 15,
-    marginLeft: 20,
-    
-  },
-  title: {
-    fontFamily: 'press-start',
-    fontSize: 35,
-    textAlign: 'center',
-    marginTop: 20,
-    color: 'white',
-    textShadowColor: 'black',
-    textShadowRadius: 10,
-  },
-  endScreenButtonsView: {
-    marginTop: 30,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-
-  },
-  endScreenButton: {
-    backgroundColor: 'white',
-    width: 120,
-    height: 40,
-    justifyContent: 'center',
-    paddingTop: 5,
-    borderRadius: 0,
-  },
-  endScreenButtonTxt: {
-    textAlign: 'center',
-    fontFamily: 'press-start',
-  },
-  dataDisplay: {
-    marginTop: 30,
-  },
-})

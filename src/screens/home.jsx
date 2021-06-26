@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, Platform, TouchableOpacity } from 'react-native';
+import { Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import styles from '../styles/homeStyles';
 
 export default function homepage({playListener}) {
   return (
@@ -16,21 +17,3 @@ export default function homepage({playListener}) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  heading: {
-
-  },
-  playButton: {
-
-  },
-  title: {
-    fontFamily: 'press-start'
-  },
-});
