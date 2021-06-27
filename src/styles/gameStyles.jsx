@@ -109,4 +109,21 @@ export default StyleSheet.create({
     height: 15,
     borderRadius: 50,
   }, 
+  timerLine: {
+    justifyContent: 'flex-start',
+    borderColor: '#250396',
+    borderBottomWidth: 10,
+    borderLeftWidth: 10,
+    borderRightWidth: 10,
+    alignItems: 'center',
+    alignSelf: 'center',
+    height: 30,
+    width: width*0.80,
+    flexDirection: 'row',
+  },  
+  slider: {
+    backgroundColor: 'yellow',
+    height: '100%',
+    
+  },
 })

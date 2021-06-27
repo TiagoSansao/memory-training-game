@@ -3,12 +3,23 @@ import { Audio } from 'expo-av'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Linking from 'expo-linking';
 import styles from '../styles/gameStyles';
-import { Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert } from 'react-native';
+import {  Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert } from 'react-native';
 
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
+const { width } = Dimensions.get('window');
+
+
 export default function game({endListener}) {
 
+
+  // TODO:
+  // Timer
+  // Go to menu button
+  // Ads (the video ones)
+  // Sound (song and buttons)
+  // Home stylization
+  //
 
   //AsyncStorage.clear(); // For test purposes
 
@@ -25,6 +36,7 @@ export default function game({endListener}) {
   const [record, setRecord] = useState(0);
   const [lostTextH1, setLostTextH1] = useState("YOU GOT");
   const [circles, setCircles] = useState([0,0,0,0,0,0,0,0,0,0]);
+  const [gameTimer, setGameTimer] = useState(0);
 
   // --------------
 
@@ -32,6 +44,15 @@ export default function game({endListener}) {
     retrieveDataFromStorage();
     startNewGame();
   }, [])
+
+  // useEffect(() => {
+  //   if (playerTime) {
+  //     setInterval(() => {
+  //       setGameTimer(gameTimer + 0.10);
+  //       console.log(gameTimer);
+  //     }, 1000);
+  //   }
+  // }, [playerTime])
 
   useEffect(() => {
     return sound
@@ -93,6 +114,14 @@ export default function game({endListener}) {
       setCurrentHighlightedButton(null);
     }
     setPlayerTime(true);
+
+    const pastCurrentSequenceIndex = currentSequenceIndex;
+    setTimeout(() => {
+      console.log(pastCurrentSequenceIndex, currentSequenceIndex);
+      if (pastCurrentSequenceIndex === currentSequenceIndex) {
+        lostGame();
+      }
+    }, 10000)
   }
 
   function lostGame() {
@@ -129,7 +158,6 @@ export default function game({endListener}) {
       localSequence.push(Math.floor(Math.random() * 10)); // generate seqyebce
     }
     setSequence(localSequence);
-    console.log(localSequence);
     setCurrentSequenceIndex(1);
     setGameState("in-game");
     setPlayerTime(true);
@@ -150,7 +178,6 @@ export default function game({endListener}) {
       if (playerValue !== sequence[index]) return lostGame();
       if (index + 1  === currentSequenceIndex) { 
         setPlayerTime(false);
-        console.log('Next level')
         let newCurrentSequenceIndex = currentSequenceIndex + 1;
         setCurrentSequenceIndex(newCurrentSequenceIndex);
         setPlayerSequence([]);
@@ -159,7 +186,6 @@ export default function game({endListener}) {
         let whichCircle = (newCurrentSequenceIndex - 2) % 10;
         localCircles[whichCircle] += 1;
         setCircles(localCircles);
-        console.log(localCircles);
 
         await timer(1000);
         highlightSequence(newCurrentSequenceIndex);
@@ -251,6 +277,9 @@ export default function game({endListener}) {
     <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
       return <View key={index} style={styles.row}>{rowArr}</View>
     }))}</View>
+    <View style={[styles.timerLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>
+      <View style={[styles.slider, {width: ((width * 0.80) - 20) * 0.5,}]}></View>
+    </View>
   </SafeAreaView>
   )
 };
