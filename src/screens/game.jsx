@@ -36,7 +36,7 @@ export default function game({endListener}) {
   const [record, setRecord] = useState(0);
   const [lostTextH1, setLostTextH1] = useState("YOU GOT");
   const [circles, setCircles] = useState([0,0,0,0,0,0,0,0,0,0]);
-  const [gameTimer, setGameTimer] = useState(0);
+  const [gameTimer, setGameTimer] = useState(false);
 
   // --------------
 
@@ -62,6 +62,12 @@ export default function game({endListener}) {
   }, [sound]);
 
   // --------------
+
+  function activateTimer() {
+    const gameTimerInterval = setInterval(() => {
+      setGameTimer(0.10 + gameTimer)
+    }, 1000)
+  }
 
   const retrieveDataFromStorage = async () => {
     try {
@@ -114,14 +120,8 @@ export default function game({endListener}) {
       setCurrentHighlightedButton(null);
     }
     setPlayerTime(true);
-
-    const pastCurrentSequenceIndex = currentSequenceIndex;
-    setTimeout(() => {
-      console.log(pastCurrentSequenceIndex, currentSequenceIndex);
-      if (pastCurrentSequenceIndex === currentSequenceIndex) {
-        lostGame();
-      }
-    }, 10000)
+    setGameTimer(true);
+    Pijackon(currentSequenceIndex);
   }
 
   function lostGame() {
@@ -152,6 +152,17 @@ export default function game({endListener}) {
     }
   }
 
+  let timeoutTimer
+  async function Pijackon(level) {
+    timeoutTimer = setTimeout(() => {
+      console.log('sim');
+      if (gameTimer) {
+        console.log("é o pijas", level, currentSequenceIndex);
+        lostGame();
+      }
+    }, 3000) 
+  }
+
   function startNewGame() {
     const localSequence = [];
     for(let i = 0; i < 100; i += 1) {
@@ -172,6 +183,7 @@ export default function game({endListener}) {
   
   function pressListener(btnIndex) {
     if (playerTime !== true) return;
+    setGameTimer(false);
     const newPlayerSequence = [...playerSequence, btnIndex];
     setPlayerSequence(newPlayerSequence);
     newPlayerSequence.forEach( async (playerValue, index) => {
