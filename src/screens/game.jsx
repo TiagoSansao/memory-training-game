@@ -24,6 +24,7 @@ export default function game({endListener}) {
   const [rateOurAppPreference, setRateOurAppPreference] = useState(true);
   const [record, setRecord] = useState(0);
   const [lostTextH1, setLostTextH1] = useState("YOU GOT");
+  const [circles, setCircles] = useState([0,0,0,0,0,0,0,0,0,0]);
 
   // --------------
 
@@ -128,6 +129,7 @@ export default function game({endListener}) {
       localSequence.push(Math.floor(Math.random() * 10)); // generate seqyebce
     }
     setSequence(localSequence);
+    console.log(localSequence);
     setCurrentSequenceIndex(1);
     setGameState("in-game");
     setPlayerTime(true);
@@ -135,6 +137,7 @@ export default function game({endListener}) {
     //playAudio();
     setLostTextH1("YOU GOT");
     setPlayerSequence([]);
+    setCircles([0,0,0,0,0,0,0,0,0,0]);
     setTimeout(() => {
       setCurrentHighlightedButton(null)}, 500);
   }
@@ -151,6 +154,13 @@ export default function game({endListener}) {
         let newCurrentSequenceIndex = currentSequenceIndex + 1;
         setCurrentSequenceIndex(newCurrentSequenceIndex);
         setPlayerSequence([]);
+
+        let localCircles = circles.slice();
+        let whichCircle = (newCurrentSequenceIndex - 2) % 10;
+        localCircles[whichCircle] += 1;
+        setCircles(localCircles);
+        console.log(localCircles);
+
         await timer(1000);
         highlightSequence(newCurrentSequenceIndex);
       }
@@ -178,6 +188,35 @@ export default function game({endListener}) {
     });
     
     return buttonsWithRowsArr;
+  }
+
+  function getCircleColor(number) {
+    let color;
+    switch(number) {
+      case 0: 
+        color = 'white';
+        break;
+      case 1:
+        color = '#dbfc03';
+        break;
+      case 2:
+        color = '#fcc203';
+        break;
+      case 3:
+        color = '#fc8403';
+        break;
+      case 4:
+        color = '#fc4103';
+        break;
+    }
+    return color;
+  }
+
+  function getCircles() {
+    const circlesEl = circles.map(((circle, i) => {
+      return <View key={i} style={[{backgroundColor: getCircleColor(circle)}, styles.statusGeometric]}></View>
+    }))
+    return circlesEl;
   }
 
   // --------------
@@ -208,7 +247,7 @@ export default function game({endListener}) {
   return (
   <SafeAreaView style={styles.container}>
     <View style={styles.heading}><Text style={styles.title}>MEMORY TRAINING</Text></View>
-    <View style={[styles.statusLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}><View style={styles.statusGeometric}></View></View>
+    <View style={[styles.statusLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>{getCircles()}</View>
     <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
       return <View key={index} style={styles.row}>{rowArr}</View>
     }))}</View>

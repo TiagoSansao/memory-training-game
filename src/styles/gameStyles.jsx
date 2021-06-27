@@ -93,21 +93,20 @@ export default StyleSheet.create({
     marginTop: 30,
   },
   statusLine: {
-    
+    justifyContent: 'space-evenly',
     borderColor: '#250396',
     borderTopWidth: 10,
     borderLeftWidth: 10,
     borderRightWidth: 10,
-    justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
     height: 30,
     width: width*0.80,
+    flexDirection: 'row',
   },
   statusGeometric: {
-    display: 'none',
-    width: 20,
-    height: 20,
-    backgroundColor: 'red',
+    width: 15,
+    height: 15,
+    borderRadius: 50,
   }, 
 })
