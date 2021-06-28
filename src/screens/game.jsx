@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Linking from 'expo-linking';
 import styles from '../styles/gameStyles';
 import {  Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert } from 'react-native';
+import { RECORDING_OPTION_IOS_BIT_RATE_STRATEGY_VARIABLE_CONSTRAINED } from 'expo-av/build/Audio';
 
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -36,9 +37,21 @@ export default function game({endListener}) {
   const [record, setRecord] = useState(0);
   const [lostTextH1, setLostTextH1] = useState("YOU GOT");
   const [circles, setCircles] = useState([0,0,0,0,0,0,0,0,0,0]);
-  const [gameTimer, setGameTimer] = useState(false);
+  const [gameTimer, setGameTimer]  = useState(0);
+
 
   // --------------
+  
+  useEffect(() => {
+    if (!playerTime) return setGameTimer(0);
+    const timerInterval = setInterval(() => {
+      if (gameTimer >= 5) return lostGame();
+      console.log(gameTimer);
+      setGameTimer((gt => gt + 1));
+    }, 1000)
+    return () => clearInterval(timerInterval);
+  }, [gameTimer, playerTime])
+
 
   useEffect(() => {
     retrieveDataFromStorage();
@@ -61,13 +74,9 @@ export default function game({endListener}) {
       : undefined;
   }, [sound]);
 
-  // --------------
 
-  function activateTimer() {
-    const gameTimerInterval = setInterval(() => {
-      setGameTimer(0.10 + gameTimer)
-    }, 1000)
-  }
+
+  // --------------
 
   const retrieveDataFromStorage = async () => {
     try {
@@ -119,9 +128,8 @@ export default function game({endListener}) {
       await timer(500);
       setCurrentHighlightedButton(null);
     }
+    setGameTimer(0);
     setPlayerTime(true);
-    setGameTimer(true);
-    Pijackon(currentSequenceIndex);
   }
 
   function lostGame() {
@@ -152,16 +160,6 @@ export default function game({endListener}) {
     }
   }
 
-  let timeoutTimer
-  async function Pijackon(level) {
-    timeoutTimer = setTimeout(() => {
-      console.log('sim');
-      if (gameTimer) {
-        console.log("é o pijas", level, currentSequenceIndex);
-        lostGame();
-      }
-    }, 3000) 
-  }
 
   function startNewGame() {
     const localSequence = [];
@@ -177,13 +175,13 @@ export default function game({endListener}) {
     setLostTextH1("YOU GOT");
     setPlayerSequence([]);
     setCircles([0,0,0,0,0,0,0,0,0,0]);
+    setGameTimer(0);
     setTimeout(() => {
       setCurrentHighlightedButton(null)}, 500);
   }
   
   function pressListener(btnIndex) {
     if (playerTime !== true) return;
-    setGameTimer(false);
     const newPlayerSequence = [...playerSequence, btnIndex];
     setPlayerSequence(newPlayerSequence);
     newPlayerSequence.forEach( async (playerValue, index) => {
@@ -201,6 +199,7 @@ export default function game({endListener}) {
 
         await timer(1000);
         highlightSequence(newCurrentSequenceIndex);
+        
       }
     })
   }
@@ -290,7 +289,7 @@ export default function game({endListener}) {
       return <View key={index} style={styles.row}>{rowArr}</View>
     }))}</View>
     <View style={[styles.timerLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>
-      <View style={[styles.slider, {width: ((width * 0.80) - 20) * 0.5,}]}></View>
+      <View style={[styles.slider, {width: ((width * 0.80) - 20) * ((gameTimer / 10) * 2 ),}]}></View>
     </View>
   </SafeAreaView>
   )

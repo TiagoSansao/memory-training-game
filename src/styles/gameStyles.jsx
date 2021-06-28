@@ -110,7 +110,7 @@ export default StyleSheet.create({
     borderRadius: 50,
   }, 
   timerLine: {
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-end',
     borderColor: '#250396',
     borderBottomWidth: 10,
     borderLeftWidth: 10,
