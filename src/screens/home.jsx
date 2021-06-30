@@ -10,7 +10,7 @@ export default function homepage({playListener}) {
       </View>
       <View>
         <TouchableOpacity onPress={playListener} style={styles.playButton} >
-          <Text>PLAY</Text>
+          <Text style={styles.playButtonTxt}>PLAY</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

@@ -42,7 +42,7 @@ export default StyleSheet.create({
     top: 100,
     zIndex: 10,
     width: width*0.80,
-    height: width*0.80,
+    height: width*0.80 + 60,
     opacity: 0.9,
     backgroundColor: 'black',
   },

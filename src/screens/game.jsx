@@ -274,9 +274,13 @@ export default function game({endListener}) {
           </View>
         </View>
         <View style={styles.heading}><Text style={styles.title}>MEMORY TRAINING</Text></View>
+        <View style={[styles.statusLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>{getCircles()}</View>
         <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
           return <View key={index} style={styles.row}>{rowArr}</View>
         }))}</View>
+        <View style={[styles.timerLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>
+          <View style={[styles.slider, {width: ((width * 0.80) - 20) * ((gameTimer / 10) * 2 ),}]}></View>
+        </View>
       </SafeAreaView>
       )
   }
