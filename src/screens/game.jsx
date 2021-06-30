@@ -78,6 +78,31 @@ export default function game({endListener}) {
 
   // --------------
 
+  const setGameInStorageAndUpdateStatistics = async (lastScore) => {
+    try {
+      let newStatistics = {};
+      let currentStatistics = await AsyncStorage.getItem('statistics');
+      if (currentStatistics) {
+        console.log('já');
+        newStatistics = JSON.parse(currentStatistics);
+        newStatistics.games.push(lastScore);
+        newStatistics.averageScore = (newStatistics.games.reduce((totalScore, score ) => totalScore + score) / newStatistics.games.length).toFixed(1);
+        newStatistics.lastScore = lastScore;
+        newStatistics.gamesLength = newStatistics.games.length;
+        await AsyncStorage.setItem('statistics', JSON.stringify(newStatistics));
+      } else {
+        newStatistics.gamesLength = 1;
+        newStatistics.games = [lastScore];
+        newStatistics.averageScore = lastScore;
+        newStatistics.lastScore = lastScore;
+        await AsyncStorage.setItem('statistics', JSON.stringify(newStatistics));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+
   const retrieveDataFromStorage = async () => {
     try {
       const rateOurAppAnswer = await AsyncStorage.getItem('rateOurAppAnswer');
@@ -135,6 +160,7 @@ export default function game({endListener}) {
   function lostGame() {
     setGameState("lost");
     setPlayerTime(false);
+    setGameInStorageAndUpdateStatistics(currentSequenceIndex);
     if (currentSequenceIndex > record) {
       setDataInStorage(null, currentSequenceIndex);
       setLostTextH1("NEW RECORD")
