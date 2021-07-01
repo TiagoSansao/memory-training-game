@@ -1,5 +1,5 @@
 import { StyleSheet, StatusBar, Platform, Dimensions } from 'react-native';
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
@@ -9,21 +9,26 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   heading: {
-
+    height: height * 0.30,
+  },
+  buttons: {
+    height: height * 0.30,
   },
   playButton: {
     backgroundColor: 'white',
     width: width*0.60,
-    height: 40,
+    height: 60,
+    borderRadius: 1000,
     justifyContent: 'center',
     paddingTop: 5,
-    borderRadius: 0,
     backgroundColor: '#0ce80f',
   },
   playButtonTxt: {
     textAlign: 'center',
     color: 'black',
     fontFamily: 'press-start',
+    fontSize: 20,
+    
   },
   title: {
     textTransform: 'uppercase',
@@ -34,5 +39,23 @@ export default StyleSheet.create({
     color: 'white',
     textShadowColor: 'black',
     textShadowRadius: 10,
+  },
+  statistics: {
+    marginTop: 50,
+    backgroundColor: '#619eff',
+    padding: 10,
+    width: width * 0.60,
+  },
+  statisticH1: {
+    color: 'yellow',
+    textShadowRadius: 10,
+    textShadowColor: 'black',
+    fontSize: 25,
+    textAlign: 'center',
+  },
+  statisticData: {
+    color: 'black',
+    fontSize: 15,
+    textAlign: 'left',
   },
 });

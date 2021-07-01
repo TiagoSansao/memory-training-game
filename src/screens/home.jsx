@@ -41,16 +41,16 @@ export default function homepage({playListener}) {
       <View style={styles.heading}>
         <Text style={styles.title}>Memory Training</Text>
       </View>
-      <View>
+      <View style={styles.buttons}>
         <TouchableOpacity onPress={playListener} style={styles.playButton} >
           <Text style={styles.playButtonTxt}>PLAY</Text>
         </TouchableOpacity>
       </View>
-      <View>
-        <Text>Statistics</Text>
-        <Text>Last Score: {statistics.lastScore}</Text>
-        <Text>Average Score: {statistics.averageScore} ({statistics.gamesLength} games)</Text>
-        <Text>Record: {statistics.lastScore}</Text>
+      <View style={styles.statistics}>
+        <Text style={styles.statisticH1}>Statistics</Text>
+        <Text style={styles.statisticData}>Last Score: {statistics.lastScore}</Text>
+        <Text style={styles.statisticData}>Average Score: {statistics.averageScore} ({statistics.gamesLength} games)</Text>
+        <Text style={styles.statisticData}>Record: {statistics.lastScore}</Text>
       </View>
     </SafeAreaView>
   )
