@@ -15,11 +15,11 @@ export default function game({endListener}) {
 
 
   // TODO:
-  // Timer
-  // Go to menu button
+  // Timer (X)
+  // Go to menu button (NOT GONNA DO)
   // Ads (the video ones)
   // Sound (song and buttons)
-  // Home stylization
+  // Home stylization (MAYBE DONE)
   //
 
   // AsyncStorage.clear(); // For test purposes
