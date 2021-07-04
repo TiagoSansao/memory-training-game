@@ -22,7 +22,7 @@ export default function game({endListener}) {
   // Home stylization
   //
 
-  //AsyncStorage.clear(); // For test purposes
+  // AsyncStorage.clear(); // For test purposes
 
   // --------------
 
@@ -36,8 +36,10 @@ export default function game({endListener}) {
   const [rateOurAppPreference, setRateOurAppPreference] = useState(true);
   const [record, setRecord] = useState(0);
   const [lostTextH1, setLostTextH1] = useState("YOU GOT");
+  const [lostRecord, setLostRecord] = useState("Record:");
   const [circles, setCircles] = useState([0,0,0,0,0,0,0,0,0,0]);
   const [gameTimer, setGameTimer]  = useState(0);
+  const [statistics, setStatistics] = useState({});
 
 
   // --------------
@@ -46,7 +48,6 @@ export default function game({endListener}) {
     if (!playerTime) return setGameTimer(0);
     const timerInterval = setInterval(() => {
       if (gameTimer >= 5) return lostGame();
-      console.log(gameTimer);
       setGameTimer((gt => gt + 1));
     }, 1000)
     return () => clearInterval(timerInterval);
@@ -58,14 +59,6 @@ export default function game({endListener}) {
     startNewGame();
   }, [])
 
-  // useEffect(() => {
-  //   if (playerTime) {
-  //     setInterval(() => {
-  //       setGameTimer(gameTimer + 0.10);
-  //       console.log(gameTimer);
-  //     }, 1000);
-  //   }
-  // }, [playerTime])
 
   useEffect(() => {
     return sound
@@ -89,8 +82,10 @@ export default function game({endListener}) {
         newStatistics.averageScore = (newStatistics.games.reduce((totalScore, score ) => totalScore + score) / newStatistics.games.length).toFixed(1);
         newStatistics.lastScore = lastScore;
         newStatistics.gamesLength = newStatistics.games.length;
+        newStatistics.record = lastScore > newStatistics.record ? lastScore : newStatistics.record;
         await AsyncStorage.setItem('statistics', JSON.stringify(newStatistics));
       } else {
+        newStatistics.record = lastScore;
         newStatistics.gamesLength = 1;
         newStatistics.games = [lastScore];
         newStatistics.averageScore = lastScore;
@@ -106,28 +101,23 @@ export default function game({endListener}) {
   const retrieveDataFromStorage = async () => {
     try {
       const rateOurAppAnswer = await AsyncStorage.getItem('rateOurAppAnswer');
-      const storedRecord = await AsyncStorage.getItem('record'); 
-
-      if (storedRecord !== null) setRecord(storedRecord);
-
+      const loadedStatistics = await AsyncStorage.getItem('statistics');
+      
       if (rateOurAppAnswer === "never") setRateOurAppPreference(false);
       else setRateOurAppPreference(true);
+
+      if (!loadedStatistics) return setStatistics(false);
+      setStatistics(JSON.parse(loadedStatistics));
     } catch (e) {
       console.log(e);
     }
   }
 
-  const setDataInStorage = async (answer, record) => {
+  const setDataInStorage = async (answer) => {
     try {
-      if (answer) {
-        if (answer !== "never" && answer !== "ok") return;
-        await AsyncStorage.setItem('rateOurAppAnswer', 'never')
-        setRateOurAppPreference(false);
-      }
-      else if (record) {
-        await AsyncStorage.setItem('record', record.toString());
-        setRecord(record);
-      }
+      if (answer !== "never" && answer !== "ok") return;
+      await AsyncStorage.setItem('rateOurAppAnswer', 'never')
+      setRateOurAppPreference(false);
     } catch (e) {
       console.log(e);
     }
@@ -146,6 +136,7 @@ export default function game({endListener}) {
   
   // --------------
 
+
   async function highlightSequence(newCurrentSequenceIndex) {
     for (let i = 0; i < newCurrentSequenceIndex; i += 1) {
       await timer(100);
@@ -157,12 +148,13 @@ export default function game({endListener}) {
     setPlayerTime(true);
   }
 
-  function lostGame() {
-    setGameState("lost");
-    setPlayerTime(false);
+  async function lostGame() {
     setGameInStorageAndUpdateStatistics(currentSequenceIndex);
-    if (currentSequenceIndex > record) {
-      setDataInStorage(null, currentSequenceIndex);
+    setPlayerTime(false);
+    setGameState("lost");
+    if (currentSequenceIndex > statistics.record) {
+      
+      setLostRecord("Previous Record:")
       setLostTextH1("NEW RECORD")
       if (rateOurAppPreference === true) {
         Alert.alert("Rate our app", "Could you rate our APP on Google Play Store? We'd be glad to know your opinion!", [
@@ -198,8 +190,9 @@ export default function game({endListener}) {
     setPlayerTime(true);
     setCurrentHighlightedButton(localSequence[0]);
     //playAudio();
-    setLostTextH1("YOU GOT");
     setPlayerSequence([]);
+    setLostTextH1("YOU GOT");
+    setLostRecord("Record:");
     setCircles([0,0,0,0,0,0,0,0,0,0]);
     setGameTimer(0);
     setTimeout(() => {
@@ -294,9 +287,8 @@ export default function game({endListener}) {
             <TouchableOpacity onPress={endListener} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>HOME</Text></TouchableOpacity>
           </View>
           <View style={styles.dataDisplay}>
-            <Text style={styles.lostTextH2}>Record: {record}</Text>
-            <Text style={styles.lostTextH2}>Rank: #{record}</Text>
-            <Text style={styles.lostTextH2}>Rank: #{record}</Text>
+            <Text style={styles.lostTextH2}>{lostRecord} {statistics.record}</Text>
+            <Text style={styles.lostTextH2}>Rank: #{statistics.record}</Text>
           </View>
         </View>
         <View style={styles.heading}><Text style={styles.title}>MEMORY TRAINING</Text></View>
@@ -321,6 +313,12 @@ export default function game({endListener}) {
     <View style={[styles.timerLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>
       <View style={[styles.slider, {width: ((width * 0.80) - 20) * ((gameTimer / 10) * 2 ),}]}></View>
     </View>
+    <View style={styles.statistics}>
+        <Text style={styles.statisticH1}>Statistics</Text>
+        <Text style={styles.statisticData}>Last Score: {statistics.lastScore ? statistics.lastScore : 'no data'}</Text>
+        <Text style={styles.statisticData}>Average Score: {statistics.averageScore ? statistics.averageScore + ` (${statistics.gamesLength} games)` : 'no data'} </Text>
+        <Text style={styles.statisticData}>Record: {statistics.record ? statistics.record : 'no data'}</Text>
+      </View>
   </SafeAreaView>
   )
 };

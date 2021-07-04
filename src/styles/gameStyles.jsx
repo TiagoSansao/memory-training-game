@@ -126,4 +126,24 @@ export default StyleSheet.create({
     height: '100%',
     
   },
-})
+  statistics: {
+    marginTop: 50,
+    backgroundColor: '#619eff',
+    padding: 10,
+    width: width * 0.80,
+    borderRadius: 15,
+    alignSelf: 'center',
+  },
+  statisticH1: {
+    color: 'yellow',
+    textShadowRadius: 10,
+    textShadowColor: 'black',
+    fontSize: 25,
+    textAlign: 'center',
+  },
+  statisticData: {
+    color: 'black',
+    fontSize: 15,
+    textAlign: 'left',
+  },
+});

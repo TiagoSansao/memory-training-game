@@ -13,7 +13,6 @@ const fetchFonts = () => {
 export default function App() {
 
   const [screen, setScreen] = useState("homepage");
-  const [record, setRecord] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
 
   if (!dataLoaded) {

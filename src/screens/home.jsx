@@ -50,7 +50,7 @@ export default function homepage({playListener}) {
         <Text style={styles.statisticH1}>Statistics</Text>
         <Text style={styles.statisticData}>Last Score: {statistics.lastScore}</Text>
         <Text style={styles.statisticData}>Average Score: {statistics.averageScore} ({statistics.gamesLength} games)</Text>
-        <Text style={styles.statisticData}>Record: {statistics.lastScore}</Text>
+        <Text style={styles.statisticData}>Record: {statistics.record}</Text>
       </View>
     </SafeAreaView>
   )

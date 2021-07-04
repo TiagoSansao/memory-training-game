@@ -9,14 +9,12 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   heading: {
-    height: height * 0.30,
   },
   buttons: {
-    height: height * 0.30,
   },
   playButton: {
     backgroundColor: 'white',
-    width: width*0.60,
+    width: width*0.80,
     height: 60,
     borderRadius: 1000,
     justifyContent: 'center',
@@ -44,7 +42,8 @@ export default StyleSheet.create({
     marginTop: 50,
     backgroundColor: '#619eff',
     padding: 10,
-    width: width * 0.60,
+    borderRadius: 15,
+    width: width * 0.80,
   },
   statisticH1: {
     color: 'yellow',
