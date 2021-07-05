@@ -7,8 +7,8 @@
     "icon": "./src/assets/icon.png",
     "splash": {
       "image": "./src/assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#13233c"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -21,13 +21,13 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./src/assets/icon.png",
+        "backgroundColor": "#13233c"
       },
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.exideas.cp.words.english"
     },
     "web": {
-      "favicon": "./src/assets/favicon.png"
+      "favicon": "./src/assets/icon.png"
     }
   }
 }
