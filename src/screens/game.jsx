@@ -59,24 +59,24 @@ export default function game({endListener}) {
 
 
   useEffect(() => {
-    // (async function() {
-    //   const [highlight, lost] = await Promise.all([
-    //     Audio.Sound.createAsync(
-    //       require(`../assets/sounds/highlight.mp3`)
-    //     ),
-    //     Audio.Sound.createAsync(
-    //       require(`../assets/sounds/lost.mp3`)
-    //     )
-    //   ])
-    //   const soundsObj = {
-    //     highlight: highlight,
-    //     lost: lost,
-    //   }
-    //   setSounds(soundsObj);
-      
-    // })()
-    retrieveDataFromStorage();
-    startNewGame();
+    (async function() {
+      const [highlight, lost] = await Promise.all([
+        Audio.Sound.createAsync(
+          require(`../assets/sounds/highlight.mp3`)
+        ),
+        Audio.Sound.createAsync(
+          require(`../assets/sounds/lost.mp3`)
+        )
+      ])
+      console.log('got here 2')
+      const soundsObj = {
+        highlight: highlight,
+        lost: lost,
+      }
+      setSounds(soundsObj);
+      retrieveDataFromStorage();
+      startNewGame();
+    })()
   }, [])
 
 
@@ -148,25 +148,8 @@ export default function game({endListener}) {
   // --------------
 
   async function playAudio(whichAudio) {
-    switch(whichAudio) {
-      case 'highlight':
-        Audio.Sound.createAsync(
-          require(`../assets/sounds/highlight.mp3`)
-        ).then((response) => {
-          response.sound.playAsync();
-        })
-        break;
-      case 'lost':
-        Audio.Sound.createAsync(
-          require(`../assets/sounds/lost.mp3`)
-        ).then((response) => {
-          response.sound.playAsync();
-        })
-        break;
-    }
-    
-    // setSound(sounds[whichAudio.sound]);
-    // await sound.playAsync();
+    console.log(sounds);
+    await sounds[whichAudio].sound.playFromPositionAsync(0);
   }
   
   // --------------
