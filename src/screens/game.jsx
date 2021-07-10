@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Audio } from 'expo-av'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Linking from 'expo-linking';
+import { Audio } from 'expo-av';
 import styles from '../styles/gameStyles';
 import {  Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert } from 'react-native';
 
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const { width } = Dimensions.get('window');
+
 
 
 export default function game({endListener}) {
@@ -35,8 +36,7 @@ export default function game({endListener}) {
   const [currentSequenceIndex, setCurrentSequenceIndex] = useState(1);
   const [playerSequence, setPlayerSequence] = useState([]);
   const [gameState, setGameState] = useState("in-game");
-  const [sounds, setSounds] = useState/*<iSound>*/({});
-  const [sound, setSound] = useState(['highlight', 'lost']); 
+  const [sounds, setSounds] = useState/*<iSound>*/(false);
   const [sequence, setSequence] = useState([]);
   const [rateOurAppPreference, setRateOurAppPreference] = useState(true);
   const [lostTextH1, setLostTextH1] = useState("YOU GOT");
@@ -73,11 +73,16 @@ export default function game({endListener}) {
         highlight: highlight,
         lost: lost,
       }
-      setSounds(soundsObj);
       retrieveDataFromStorage();
-      startNewGame();
+      setSounds(soundsObj);
     })()
   }, [])
+
+  useEffect(() => {
+    if (sounds === false) return;
+    
+    startNewGame();
+  }, [sounds])
 
 
   // useEffect(() => {
