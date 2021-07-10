@@ -83,6 +83,7 @@ export default function game({endListener}) {
         newStatistics.lastScore = lastScore;
         newStatistics.gamesLength = newStatistics.games.length;
         newStatistics.record = lastScore > newStatistics.record ? lastScore : newStatistics.record;
+        setStatistics(newStatistics);
         await AsyncStorage.setItem('statistics', JSON.stringify(newStatistics));
       } else {
         newStatistics.record = lastScore;
@@ -90,6 +91,7 @@ export default function game({endListener}) {
         newStatistics.games = [lastScore];
         newStatistics.averageScore = lastScore;
         newStatistics.lastScore = lastScore;
+        setStatistics(newStatistics);
         await AsyncStorage.setItem('statistics', JSON.stringify(newStatistics));
       }
     } catch (e) {
@@ -299,6 +301,12 @@ export default function game({endListener}) {
         <View style={[styles.timerLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>
           <View style={[styles.slider, {width: ((width * 0.80) - 20) * ((gameTimer / 10) * 2 ),}]}></View>
         </View>
+        <View style={styles.statistics}>
+          <Text style={styles.statisticH1}>Statistics</Text>
+          <Text style={styles.statisticData}>Last Score: {statistics.lastScore ? statistics.lastScore : 'no data'}</Text>
+          <Text style={styles.statisticData}>Average Score: {statistics.averageScore ? statistics.averageScore + ` (${statistics.gamesLength} games)` : 'no data'} </Text>
+          <Text style={styles.statisticData}>Record: {statistics.record ? statistics.record : 'no data'}</Text>
+        </View>
       </SafeAreaView>
       )
   }
@@ -314,11 +322,11 @@ export default function game({endListener}) {
       <View style={[styles.slider, {width: ((width * 0.80) - 20) * ((gameTimer / 10) * 2 ),}]}></View>
     </View>
     <View style={styles.statistics}>
-        <Text style={styles.statisticH1}>Statistics</Text>
-        <Text style={styles.statisticData}>Last Score: {statistics.lastScore ? statistics.lastScore : 'no data'}</Text>
-        <Text style={styles.statisticData}>Average Score: {statistics.averageScore ? statistics.averageScore + ` (${statistics.gamesLength} games)` : 'no data'} </Text>
-        <Text style={styles.statisticData}>Record: {statistics.record ? statistics.record : 'no data'}</Text>
-      </View>
+      <Text style={styles.statisticH1}>Statistics</Text>
+      <Text style={styles.statisticData}>Last Score: {statistics.lastScore ? statistics.lastScore : 'no data'}</Text>
+      <Text style={styles.statisticData}>Average Score: {statistics.averageScore ? statistics.averageScore + ` (${statistics.gamesLength} games)` : 'no data'} </Text>
+      <Text style={styles.statisticData}>Record: {statistics.record ? statistics.record : 'no data'}</Text>
+    </View>
   </SafeAreaView>
   )
 };
