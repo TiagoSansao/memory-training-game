@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Linking from 'expo-linking';
 import styles from '../styles/gameStyles';
 import {  Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert } from 'react-native';
-import { RECORDING_OPTION_IOS_BIT_RATE_STRATEGY_VARIABLE_CONSTRAINED } from 'expo-av/build/Audio';
 
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -26,15 +25,20 @@ export default function game({endListener}) {
 
   // --------------
 
+  // interface iSound {
+  //   'highlight': Sound,
+  //   'lost': Sound,
+  // }
+
   const [currentHIghlightedButton, setCurrentHighlightedButton] = useState(null);
   const [playerTime, setPlayerTime] = useState(false);
   const [currentSequenceIndex, setCurrentSequenceIndex] = useState(1);
   const [playerSequence, setPlayerSequence] = useState([]);
   const [gameState, setGameState] = useState("in-game");
-  const [sound, setSound] = useState(); 
+  const [sounds, setSounds] = useState/*<iSound>*/({});
+  const [sound, setSound] = useState(['highlight', 'lost']); 
   const [sequence, setSequence] = useState([]);
   const [rateOurAppPreference, setRateOurAppPreference] = useState(true);
-  const [record, setRecord] = useState(0);
   const [lostTextH1, setLostTextH1] = useState("YOU GOT");
   const [lostRecord, setLostRecord] = useState("Record:");
   const [circles, setCircles] = useState([0,0,0,0,0,0,0,0,0,0]);
@@ -55,17 +59,33 @@ export default function game({endListener}) {
 
 
   useEffect(() => {
+    // (async function() {
+    //   const [highlight, lost] = await Promise.all([
+    //     Audio.Sound.createAsync(
+    //       require(`../assets/sounds/highlight.mp3`)
+    //     ),
+    //     Audio.Sound.createAsync(
+    //       require(`../assets/sounds/lost.mp3`)
+    //     )
+    //   ])
+    //   const soundsObj = {
+    //     highlight: highlight,
+    //     lost: lost,
+    //   }
+    //   setSounds(soundsObj);
+      
+    // })()
     retrieveDataFromStorage();
     startNewGame();
   }, [])
 
 
-  useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync(); }
-      : undefined;
-  }, [sound]);
+  // useEffect(() => {
+  //   return sound
+  //     ? () => {
+  //         sound.unloadAsync(); }
+  //     : undefined;
+  // }, [sound]);
 
 
 
@@ -127,14 +147,27 @@ export default function game({endListener}) {
 
   // --------------
 
-  /*async function playAudio() {
-    const { sound } = await Audio.Sound.createAsync(
-      require('../assets/sounds/playButton.mp3')
-    )
-    setSound(sound);
-    console.log('playing')
-    await sound.playAsync();
-  }*/
+  async function playAudio(whichAudio) {
+    switch(whichAudio) {
+      case 'highlight':
+        Audio.Sound.createAsync(
+          require(`../assets/sounds/highlight.mp3`)
+        ).then((response) => {
+          response.sound.playAsync();
+        })
+        break;
+      case 'lost':
+        Audio.Sound.createAsync(
+          require(`../assets/sounds/lost.mp3`)
+        ).then((response) => {
+          response.sound.playAsync();
+        })
+        break;
+    }
+    
+    // setSound(sounds[whichAudio.sound]);
+    // await sound.playAsync();
+  }
   
   // --------------
 
@@ -142,6 +175,7 @@ export default function game({endListener}) {
   async function highlightSequence(newCurrentSequenceIndex) {
     for (let i = 0; i < newCurrentSequenceIndex; i += 1) {
       await timer(100);
+      playAudio('highlight');
       setCurrentHighlightedButton(sequence[i]);
       await timer(500);
       setCurrentHighlightedButton(null);
@@ -151,6 +185,7 @@ export default function game({endListener}) {
   }
 
   async function lostGame() {
+    playAudio('lost');
     setGameInStorageAndUpdateStatistics(currentSequenceIndex);
     setPlayerTime(false);
     setGameState("lost");
@@ -190,13 +225,13 @@ export default function game({endListener}) {
     setCurrentSequenceIndex(1);
     setGameState("in-game");
     setPlayerTime(true);
-    setCurrentHighlightedButton(localSequence[0]);
-    //playAudio();
     setPlayerSequence([]);
     setLostTextH1("YOU GOT");
     setLostRecord("Record:");
     setCircles([0,0,0,0,0,0,0,0,0,0]);
     setGameTimer(0);
+    setCurrentHighlightedButton(localSequence[0]);
+    playAudio('highlight');
     setTimeout(() => {
       setCurrentHighlightedButton(null)}, 500);
   }
