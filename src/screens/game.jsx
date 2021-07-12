@@ -60,17 +60,20 @@ export default function game({endListener}) {
 
   useEffect(() => {
     (async function() {
-      const [highlight, lost] = await Promise.all([
+      const [highlight, playButton, lost] = await Promise.all([
         Audio.Sound.createAsync(
           require(`../assets/sounds/highlight.mp3`)
+        ),
+        Audio.Sound.createAsync(
+          require(`../assets/sounds/playButton.mp3`)
         ),
         Audio.Sound.createAsync(
           require(`../assets/sounds/lost.mp3`)
         )
       ])
-      console.log('got here 2')
       const soundsObj = {
         highlight: highlight,
+        playButton: playButton,
         lost: lost,
       }
       retrieveDataFromStorage();
@@ -101,7 +104,6 @@ export default function game({endListener}) {
       let newStatistics = {};
       let currentStatistics = await AsyncStorage.getItem('statistics');
       if (currentStatistics) {
-        console.log('já');
         newStatistics = JSON.parse(currentStatistics);
         newStatistics.games.push(lastScore);
         newStatistics.averageScore = (newStatistics.games.reduce((totalScore, score ) => totalScore + score) / newStatistics.games.length).toFixed(1);
@@ -153,7 +155,6 @@ export default function game({endListener}) {
   // --------------
 
   async function playAudio(whichAudio) {
-    console.log(sounds);
     await sounds[whichAudio].sound.playFromPositionAsync(0);
   }
   
@@ -308,8 +309,8 @@ export default function game({endListener}) {
         <View style={styles.lostScreen}>
           <Text style={styles.lostTextH1}>{lostTextH1}{"\n"}{currentSequenceIndex} POINTS!</Text>
           <View style={styles.endScreenButtonsView}>
-            <TouchableOpacity onPress={startNewGame} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>TRY AGAIN</Text></TouchableOpacity>
-            <TouchableOpacity onPress={endListener} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>HOME</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => {startNewGame(); playAudio('playButton')}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>TRY AGAIN</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => {endListener(); playAudio('lost')}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>HOME</Text></TouchableOpacity>
           </View>
           <View style={styles.dataDisplay}>
             <Text style={styles.lostTextH2}>{lostRecord} {statistics.record}</Text>
