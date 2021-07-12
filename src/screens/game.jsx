@@ -48,9 +48,6 @@ export default function game({endListener}) {
 
 
   // -------------- 
-
-  //  HAD BETTTER UNLOAD SOUNDS BEFORE LEAVING SCREEN BECAUSE IF I DON'T THE PLAYER WILL CRASH
-
   
   useEffect(() => {
     if (!playerTime) return setGameTimer(0);
@@ -63,35 +60,9 @@ export default function game({endListener}) {
 
 
   useEffect(() => {
-    // console.log('AQUI');
-    // (async function() {
-    //   const [highlight, playButton, lost] = await Promise.all([
-    //     Audio.Sound.createAsync(
-    //       require(`../assets/sounds/highlight.mp3`), {volume: 1}
-    //     ),
-    //     Audio.Sound.createAsync(
-    //       require(`../assets/sounds/playButton.mp3`), {volume: 1}
-    //     ),
-    //     Audio.Sound.createAsync(
-    //       require(`../assets/sounds/lost.mp3`), {volume: 1}
-    //     )
-    //   ])
-    //   const soundsObj = {
-    //     highlight: highlight,
-    //     playButton: playButton,
-    //     lost: lost,
-    //   }
       retrieveDataFromStorage();
-      // setSounds(soundsObj);
-    // })()
+      startNewGame();
   }, [])
-
-  useEffect(() => {
-    // if (sounds === false) return;
-    
-    startNewGame();
-  }, [sounds])
-
 
   useEffect(() => {
     return sound ? () => { sound.sound.unloadAsync(); }
