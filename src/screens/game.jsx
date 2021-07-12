@@ -37,6 +37,7 @@ export default function game({endListener}) {
   const [playerSequence, setPlayerSequence] = useState([]);
   const [gameState, setGameState] = useState("in-game");
   const [sounds, setSounds] = useState/*<iSound>*/(false);
+  const [sound, setSound] = useState();
   const [sequence, setSequence] = useState([]);
   const [rateOurAppPreference, setRateOurAppPreference] = useState(true);
   const [lostTextH1, setLostTextH1] = useState("YOU GOT");
@@ -62,40 +63,40 @@ export default function game({endListener}) {
 
 
   useEffect(() => {
-    console.log('AQUI');
-    (async function() {
-      const [highlight, playButton, lost] = await Promise.all([
-        Audio.Sound.createAsync(
-          require(`../assets/sounds/highlight.mp3`), {volume: 1}
-        ),
-        Audio.Sound.createAsync(
-          require(`../assets/sounds/playButton.mp3`), {volume: 1}
-        ),
-        Audio.Sound.createAsync(
-          require(`../assets/sounds/lost.mp3`), {volume: 1}
-        )
-      ])
-      const soundsObj = {
-        highlight: highlight,
-        playButton: playButton,
-        lost: lost,
-      }
+    // console.log('AQUI');
+    // (async function() {
+    //   const [highlight, playButton, lost] = await Promise.all([
+    //     Audio.Sound.createAsync(
+    //       require(`../assets/sounds/highlight.mp3`), {volume: 1}
+    //     ),
+    //     Audio.Sound.createAsync(
+    //       require(`../assets/sounds/playButton.mp3`), {volume: 1}
+    //     ),
+    //     Audio.Sound.createAsync(
+    //       require(`../assets/sounds/lost.mp3`), {volume: 1}
+    //     )
+    //   ])
+    //   const soundsObj = {
+    //     highlight: highlight,
+    //     playButton: playButton,
+    //     lost: lost,
+    //   }
       retrieveDataFromStorage();
-      setSounds(soundsObj);
-    })()
+      // setSounds(soundsObj);
+    // })()
   }, [])
 
   useEffect(() => {
-    if (sounds === false) return;
+    // if (sounds === false) return;
     
     startNewGame();
   }, [sounds])
 
 
-  // useEffect(() => {
-  //   return sound ? () => { sound.unloadAsync(); }
-  //     : undefined;
-  // }, [sound]);
+  useEffect(() => {
+    return sound ? () => { sound.sound.unloadAsync(); }
+      : undefined;
+  }, [sound]);
 
 
 
@@ -158,16 +159,35 @@ export default function game({endListener}) {
   // --------------
 
   async function playAudio(whichAudio) {
-    await sounds[whichAudio].sound.playFromPositionAsync(0);
+    let sound;
+    switch(whichAudio) {
+      case 'highlight': 
+        sound = await Audio.Sound.createAsync(
+          require(`../assets/sounds/highlight.mp3`), {volume: 1}
+        );
+        break;
+      case 'playButton':
+        sound = await Audio.Sound.createAsync(
+          require(`../assets/sounds/playButton.mp3`), {volume: 1}
+        )
+        break;
+      case 'lost':
+        sound = await Audio.Sound.createAsync(
+          require(`../assets/sounds/lost.mp3`), {volume: 1}
+        )
+        break;
+    }
+    setSound(sound);
+    await sound.sound.playAsync();
   }
 
-  function unloadSounds() {
-    console.log('unloading');
-    for (let soundX in sounds) {
-      sounds[soundX].sound.unloadAsync();
-      console.log('unloaded -')
-    }
-  }
+  // function unloadSounds() {
+  //   console.log('unloading');
+  //   for (let soundX in sounds) {
+  //     sounds[soundX].sound.unloadAsync();
+  //     console.log('unloaded -')
+  //   }
+  // }
 
   
   // --------------
@@ -322,7 +342,7 @@ export default function game({endListener}) {
           <Text style={styles.lostTextH1}>{lostTextH1}{"\n"}{currentSequenceIndex} POINTS!</Text>
           <View style={styles.endScreenButtonsView}>
             <TouchableOpacity onPress={() => {startNewGame(); playAudio('playButton')}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>TRY AGAIN</Text></TouchableOpacity>
-            <TouchableOpacity onPress={() => {endListener(); playAudio('lost'); unloadSounds(); console.log('executou aq')}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>HOME</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => {endListener(); playAudio('lost');}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>HOME</Text></TouchableOpacity>
           </View>
           <View style={styles.dataDisplay}>
             <Text style={styles.lostTextH2}>{lostRecord} {statistics.record}</Text>
