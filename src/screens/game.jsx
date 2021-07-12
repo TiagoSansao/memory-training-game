@@ -46,7 +46,10 @@ export default function game({endListener}) {
   const [statistics, setStatistics] = useState({});
 
 
-  // --------------
+  // -------------- 
+
+  //  HAD BETTTER UNLOAD SOUNDS BEFORE LEAVING SCREEN BECAUSE IF I DON'T THE PLAYER WILL CRASH
+
   
   useEffect(() => {
     if (!playerTime) return setGameTimer(0);
@@ -59,16 +62,17 @@ export default function game({endListener}) {
 
 
   useEffect(() => {
+    console.log('AQUI');
     (async function() {
       const [highlight, playButton, lost] = await Promise.all([
         Audio.Sound.createAsync(
-          require(`../assets/sounds/highlight.mp3`)
+          require(`../assets/sounds/highlight.mp3`), {volume: 1}
         ),
         Audio.Sound.createAsync(
-          require(`../assets/sounds/playButton.mp3`)
+          require(`../assets/sounds/playButton.mp3`), {volume: 1}
         ),
         Audio.Sound.createAsync(
-          require(`../assets/sounds/lost.mp3`)
+          require(`../assets/sounds/lost.mp3`), {volume: 1}
         )
       ])
       const soundsObj = {
@@ -89,9 +93,7 @@ export default function game({endListener}) {
 
 
   // useEffect(() => {
-  //   return sound
-  //     ? () => {
-  //         sound.unloadAsync(); }
+  //   return sound ? () => { sound.unloadAsync(); }
   //     : undefined;
   // }, [sound]);
 
@@ -99,6 +101,7 @@ export default function game({endListener}) {
 
   // --------------
 
+  
   const setGameInStorageAndUpdateStatistics = async (lastScore) => {
     try {
       let newStatistics = {};
@@ -157,6 +160,15 @@ export default function game({endListener}) {
   async function playAudio(whichAudio) {
     await sounds[whichAudio].sound.playFromPositionAsync(0);
   }
+
+  function unloadSounds() {
+    console.log('unloading');
+    for (let soundX in sounds) {
+      sounds[soundX].sound.unloadAsync();
+      console.log('unloaded -')
+    }
+  }
+
   
   // --------------
 
@@ -310,7 +322,7 @@ export default function game({endListener}) {
           <Text style={styles.lostTextH1}>{lostTextH1}{"\n"}{currentSequenceIndex} POINTS!</Text>
           <View style={styles.endScreenButtonsView}>
             <TouchableOpacity onPress={() => {startNewGame(); playAudio('playButton')}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>TRY AGAIN</Text></TouchableOpacity>
-            <TouchableOpacity onPress={() => {endListener(); playAudio('lost')}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>HOME</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => {endListener(); playAudio('lost'); unloadSounds(); console.log('executou aq')}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>HOME</Text></TouchableOpacity>
           </View>
           <View style={styles.dataDisplay}>
             <Text style={styles.lostTextH2}>{lostRecord} {statistics.record}</Text>

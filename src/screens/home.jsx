@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
 import styles from '../styles/homeStyles';
+import { Audio } from 'expo-av';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function homepage({playListener}) {
   
   const [statistics, setStatistics] = useState();
+  const [sounds, setSounds] = useState({});
 
   const getStatistics = async () => {
     try {
@@ -18,8 +20,29 @@ export default function homepage({playListener}) {
     }
   }
 
+  async function playAudio(whichAudio) {
+    console.log('oi');
+    sounds[whichAudio].sound.playFromPositionAsync(0);
+  }
+
+  
+
   useEffect(() => {
-    getStatistics()
+    
+
+    (async function() {
+      const [play] = await Promise.all([
+        Audio.Sound.createAsync(
+          require(`../assets/sounds/highlight.mp3`)
+        ),
+      ])
+      const soundsObj = {
+        play: play,
+      }
+      getStatistics();
+      setSounds(soundsObj);
+    })()
+
   }, []);
 
   
@@ -29,7 +52,7 @@ export default function homepage({playListener}) {
         <Text style={styles.title}>Memory Training</Text>
       </View>
       <View>
-        <TouchableOpacity onPress={playListener} style={styles.playButton} >
+        <TouchableOpacity onPress={() => {playListener(); playAudio('play')}} style={styles.playButton} >
           <Text style={styles.playButtonTxt}>PLAY</Text>
         </TouchableOpacity>
       </View>
