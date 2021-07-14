@@ -14,13 +14,14 @@ export default StyleSheet.create({
   buttons: {
   },
   playButton: {
-    backgroundColor: 'white',
     width: width*0.80,
-    height: 60,
-    borderRadius: 1000,
+    height: 65,
+    borderRadius: 10,
     justifyContent: 'center',
     paddingTop: 5,
     backgroundColor: '#0ce80f',
+    borderColor: '#00245e',
+    borderWidth: 5,
   },
   playButtonTxt: {
     textAlign: 'center',
@@ -45,6 +46,8 @@ export default StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     width: width * 0.80,
+    borderColor: '#00245e',
+    borderWidth: 5,
   },
   statisticH1: {
     color: 'yellow',
@@ -57,5 +60,30 @@ export default StyleSheet.create({
     color: 'black',
     fontSize: 15,
     textAlign: 'left',
+  },
+  songIcon: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 70,
+    height: 70,
+    borderColor: '#00245e',
+    borderWidth: 5,
+    borderRadius: 10,
+  },
+  miniButtons: {
+    marginTop: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  starSquare: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 70,
+    height: 70,
+    borderRadius: 10,
+    borderColor: '#00245e',
+    borderWidth: 5,
+    backgroundColor: '#003fa6',
   },
 });

@@ -212,7 +212,6 @@ export default function game({endListener}) {
     for(let i = 0; i < 100; i += 1) {
       localSequence.push(Math.floor(Math.random() * 9)); // generate sequence
     }
-    console.log(localSequence);
     setSequence(localSequence);
     setCurrentSequenceIndex(1);
     setGameState("in-game");

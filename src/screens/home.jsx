@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Text, Image, View, SafeAreaView, TouchableOpacity } from 'react-native';
-import styles from '../styles/homeStyles';
+import { Text, Image, View, SafeAreaView, TouchableHighlight } from 'react-native';
 import { Audio } from 'expo-av';
+import { Entypo } from '@expo/vector-icons';
+import styles from '../styles/homeStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import soundIcon from '../assets/images/music.png';
 
@@ -66,9 +67,9 @@ export default function homepage({playListener, soundController, setSongState, s
         <Text style={styles.title}>Memory Training</Text>
       </View>
       <View>
-        <TouchableOpacity onPress={() => {playListener(); playAudio('playButton')}} style={styles.playButton} >
+        <TouchableHighlight onPress={() => {playListener(); playAudio('playButton')}} style={styles.playButton} >
           <Text style={styles.playButtonTxt}>PLAY</Text>
-        </TouchableOpacity>
+        </TouchableHighlight>
       </View>
       <View style={styles.statistics}>
         <Text style={styles.statisticH1}>Statistics</Text>
@@ -85,15 +86,22 @@ export default function homepage({playListener, soundController, setSongState, s
         <Text style={styles.title}>Memory Training</Text>
       </View>
       <View style={styles.buttons}>
-        <TouchableOpacity onPress={playListener} style={styles.playButton} >
+        <TouchableHighlight onPress={playListener} style={styles.playButton} >
           <Text style={styles.playButtonTxt}>PLAY</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={controlSong}>
-          <Image source={soundIcon} style={ {width: 50, height: 50,}}></Image>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}}>
-
-        </TouchableOpacity>
+        </TouchableHighlight>
+        <View style={styles.miniButtons}>
+          <TouchableHighlight style={[styles.songIcon, {backgroundColor: songState === 'true' ? '#940019': '#005e00'}]} onPress={controlSong}>
+            <Entypo name={'note'} color='white' size={45}></Entypo>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.starSquare} onPress={() => {
+            Linking.openURL("https://play.google.com/store/apps/details?id=com.tiagosansao.convertcase")
+          }}>
+            <Entypo name={'star'} color='white' size={50}></Entypo>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.starSquare} onPress={() => {}}>
+            <Text style={{fontSize: 60, color: 'white'}}>?</Text>
+          </TouchableHighlight>
+        </View>
       </View>
       <View style={styles.statistics}>
         <Text style={styles.statisticH1}>Statistics</Text>
