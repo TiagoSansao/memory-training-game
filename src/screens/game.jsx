@@ -148,6 +148,7 @@ export default function game({endListener}) {
     }
     setSound(sound);
     await sound.sound.playAsync();
+    return;
   }
 
   // function unloadSounds() {
@@ -209,8 +210,9 @@ export default function game({endListener}) {
   function startNewGame() {
     const localSequence = [];
     for(let i = 0; i < 100; i += 1) {
-      localSequence.push(Math.floor(Math.random() * 10)); // generate seqyebce
+      localSequence.push(Math.floor(Math.random() * 9)); // generate sequence
     }
+    console.log(localSequence);
     setSequence(localSequence);
     setCurrentSequenceIndex(1);
     setGameState("in-game");
@@ -310,8 +312,8 @@ export default function game({endListener}) {
         <View style={styles.lostScreen}>
           <Text style={styles.lostTextH1}>{lostTextH1}{"\n"}{currentSequenceIndex} POINTS!</Text>
           <View style={styles.endScreenButtonsView}>
-            <TouchableOpacity onPress={() => {startNewGame(); playAudio('playButton')}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>TRY AGAIN</Text></TouchableOpacity>
-            <TouchableOpacity onPress={() => {endListener(); playAudio('lost');}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>HOME</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => {startNewGame();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>TRY AGAIN</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => {endListener();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>HOME</Text></TouchableOpacity>
           </View>
           <View style={styles.dataDisplay}>
             <Text style={styles.lostTextH2}>{lostRecord} {statistics.record}</Text>

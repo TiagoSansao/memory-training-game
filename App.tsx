@@ -28,7 +28,6 @@ export default function App() {
   async function loadSong() {
     let shouldPlayBool
     shouldPlayBool = await AsyncStorage.getItem("music");
-    console.log(typeof shouldPlayBool);
     if (shouldPlayBool === null || shouldPlayBool === undefined) shouldPlayBool = "true";
     
     const { sound } = await Audio.Sound.createAsync(
@@ -36,7 +35,8 @@ export default function App() {
     )
     setSound(sound);
     setSongState(shouldPlayBool);
-    if (shouldPlayBool === 'true') return sound.playAsync();
+    if (shouldPlayBool === 'true') return sound.playAsync(); 
+    // Sorry god, I ask your pardon for using boolean values in string type, but it happened to be easier to implement :C
   }
 
 
@@ -47,12 +47,22 @@ export default function App() {
   }
 
   
-  function endListener() {
+  async function endListener() {
     setScreen("homepage");
+    const { sound } = await Audio.Sound.createAsync(
+      require('./src/assets/sounds/lost.mp3'), { volume: 1 }
+    )
+    sound.playAsync();
+    setTimeout(() => {sound.unloadAsync()}, 1000);
   }
 
-  function playListener() {
+  async function playListener() {
     setScreen("game");
+    const { sound } = await Audio.Sound.createAsync(
+      require('./src/assets/sounds/playButton.mp3'), { volume: 1 }
+    )
+    sound.playAsync();
+    setTimeout(() => {sound.unloadAsync()}, 1000);
   }
   
 
