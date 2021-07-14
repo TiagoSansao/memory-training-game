@@ -10,6 +10,8 @@ export default StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   heading: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
   },
   buttons: {
   },
@@ -35,7 +37,16 @@ export default StyleSheet.create({
     fontFamily: 'press-start',
     fontSize: 35,
     textAlign: 'center',
-    marginTop: 20,
+    color: 'white',
+    textShadowColor: 'black',
+    textShadowRadius: 10,
+    textDecorationLine: "underline",
+  },
+  caption: {
+    textTransform: 'uppercase',
+    fontFamily: 'press-start',
+    fontSize: 15,
+    textAlign: 'center',
     color: 'white',
     textShadowColor: 'black',
     textShadowRadius: 10,

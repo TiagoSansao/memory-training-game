@@ -4,7 +4,10 @@ const {height, width} = Dimensions.get("window");
 
 export default StyleSheet.create({
   heading: {
-    height: 100,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    marginTop: 20,
+    marginBottom: 20,
   },
   container: {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
@@ -63,10 +66,20 @@ export default StyleSheet.create({
     
   },
   title: {
+    textTransform: 'uppercase',
     fontFamily: 'press-start',
     fontSize: 35,
     textAlign: 'center',
-    marginTop: 20,
+    color: 'white',
+    textShadowColor: 'black',
+    textShadowRadius: 10,
+    textDecorationLine: "underline",
+  },
+  caption: {
+    textTransform: 'uppercase',
+    fontFamily: 'press-start',
+    fontSize: 15,
+    textAlign: 'center',
     color: 'white',
     textShadowColor: 'black',
     textShadowRadius: 10,
