@@ -18,7 +18,7 @@ export default function game({endListener}) {
   // Timer (X)
   // Go to menu button (NOT GONNA DO)
   // Ads (the video ones)
-  // Sound (song and buttons)
+  // Sound (X)
   // Home stylization (MAYBE DONE)
   //
 
@@ -68,8 +68,6 @@ export default function game({endListener}) {
     return sound ? () => { sound.sound.unloadAsync(); }
       : undefined;
   }, [sound]);
-
-
 
   // --------------
 
