@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Text, Image, View, SafeAreaView, TouchableHighlight } from 'react-native';
+import { Alert, Text, Image, View, SafeAreaView, TouchableHighlight } from 'react-native';
 import { Audio } from 'expo-av';
 import { Entypo } from '@expo/vector-icons';
 import styles from '../styles/homeStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import soundIcon from '../assets/images/music.png';
 
 
-export default function homepage({playListener, soundController, setSongState, songState}) {
+export default function homepage({playListener, lang, soundController, setSongState, songState}) {
   
   const [statistics, setStatistics] = useState();
   const [sound, setSound] = useState();
@@ -64,7 +63,8 @@ export default function homepage({playListener, soundController, setSongState, s
   if (!statistics) return (
     <SafeAreaView style={styles.container}>
       <View style={styles.heading}>
-        <Text style={styles.title}>Memory Training</Text>
+        <Text style={styles.title}>MEMSOR</Text>
+        <Text style={styles.caption}>Memory Training</Text>
       </View>
       <View>
         <TouchableHighlight onPress={() => {playListener(); playAudio('playButton')}} style={styles.playButton} >
@@ -83,7 +83,8 @@ export default function homepage({playListener, soundController, setSongState, s
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.heading}>
-        <Text style={styles.title}>Memory Training</Text>
+        <Text style={styles.title}>MEMTRAIN</Text>
+        <Text style={styles.caption}>Memory Training</Text>
       </View>
       <View style={styles.buttons}>
         <TouchableHighlight onPress={playListener} style={styles.playButton} >
@@ -98,7 +99,9 @@ export default function homepage({playListener, soundController, setSongState, s
           }}>
             <Entypo name={'star'} color='white' size={50}></Entypo>
           </TouchableHighlight>
-          <TouchableHighlight style={styles.starSquare} onPress={() => {}}>
+          <TouchableHighlight style={styles.starSquare} onPress={() => {
+            Alert.alert('How To Play', "There are 9 squares, when the game starts a random square will glow, top and down bars' color will show to you whether it is your time to play or not, if it's green it means you can click at the square which glowed previously for you, if you click the wrong square you will lose. You get one point for every sequence you complete, every time you get one point there will be one more square in the next sequence. You can check your points at the top bar. Pretty simple, right? ")
+          }}>
             <Text style={{fontSize: 60, color: 'white'}}>?</Text>
           </TouchableHighlight>
         </View>

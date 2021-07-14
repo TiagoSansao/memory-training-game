@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Game from './src/screens/game';
 import Homepage from './src/screens/home';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import { Audio } from 'expo-av';
-import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NativeModules, Platform } from 'react-native';
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -19,11 +19,31 @@ export default function App() {
   const [dataLoaded, setDataLoaded] = useState<boolean>(false);
   const [sound, setSound] = useState<any>();
   const [songState, setSongState] = useState<string>("true");
+  const [language, setLanguage] = useState<string>();
   
 
   useEffect(() => {
+    languageHandler();
     loadSong();
   }, [])
+
+  async function languageHandler() {
+    const storedLanguage = await AsyncStorage.getItem("language");
+    if (storedLanguage) return setLanguage(storedLanguage);
+    let locale: string = "en_US"
+
+    if (Platform.OS === "android") {
+      locale = NativeModules.I18nManager.localeIdentifier;
+    } else if (Platform.OS === "ios") {
+      locale = NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0]
+    }
+    
+    const acceptedLocales = ["pt_BR", "en_US"];
+    acceptedLocales.forEach((acceptedLocale) => {
+      if (acceptedLocale === locale) return setLanguage(locale);
+    })
+    return setLanguage("en_US");
+  }
 
   async function loadSong() {
     let shouldPlayBool
@@ -67,7 +87,7 @@ export default function App() {
   
 
 
-  if (screen === "homepage") return <Homepage songState={songState} setSongState={setSongState} soundController={sound} playListener={playListener}/>
-  return <Game endListener={endListener}/>
+  if (screen === "homepage") return <Homepage lang={language} songState={songState} setSongState={setSongState} soundController={sound} playListener={playListener}/>
+  return <Game lang={language} endListener={endListener}/>
   
 }

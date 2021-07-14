@@ -11,16 +11,16 @@ const { width } = Dimensions.get('window');
 
 
 
-export default function game({endListener}) {
+export default function game({endListener, lang}) {
 
 
   // TODO:
   // Timer (X)
-  // Go to menu button (NOT GONNA DO)
-  // Ads (the video ones)
+  // Go to menu button (X)
+  // Intersitial ads ( )
   // Sound (X)
-  // Home stylization (MAYBE DONE)
-  //
+  // Home stylization (X)
+  // MULTI-LANGUAGE ( )
 
   // AsyncStorage.clear(); // For test purposes
 
@@ -212,10 +212,10 @@ export default function game({endListener}) {
     for(let i = 0; i < 100; i += 1) {
       localSequence.push(Math.floor(Math.random() * 9)); // generate sequence
     }
+    setPlayerTime(false);
     setSequence(localSequence);
     setCurrentSequenceIndex(1);
     setGameState("in-game");
-    setPlayerTime(true);
     setPlayerSequence([]);
     setLostTextH1("YOU GOT");
     setLostRecord("Record:");
@@ -224,7 +224,9 @@ export default function game({endListener}) {
     setCurrentHighlightedButton(localSequence[0]);
     playAudio('highlight');
     setTimeout(() => {
-      setCurrentHighlightedButton(null)}, 500);
+      setCurrentHighlightedButton(null);
+      setPlayerTime(true);
+    }, 500);
   }
   
   function pressListener(btnIndex) {
@@ -319,7 +321,10 @@ export default function game({endListener}) {
             <Text style={styles.lostTextH2}>Rank: #{statistics.record}</Text>
           </View>
         </View>
-        <View style={styles.heading}><Text style={styles.title}>MEMORY TRAINING</Text></View>
+        <View style={styles.heading}>
+          <Text style={styles.title}>MEMTRAIN</Text>
+          <Text style={styles.caption}>Memory Training</Text>
+        </View>
         <View style={[styles.statusLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>{getCircles()}</View>
         <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
           return <View key={index} style={styles.row}>{rowArr}</View>
@@ -339,7 +344,10 @@ export default function game({endListener}) {
 
   return (
   <SafeAreaView style={styles.container}>
-    <View style={styles.heading}><Text style={styles.title}>MEMORY TRAINING</Text></View>
+    <View style={styles.heading}>
+      <Text style={styles.title}>MEMTRAIN</Text>
+      <Text style={styles.caption}>Memory Training</Text>
+    </View>
     <View style={[styles.statusLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>{getCircles()}</View>
     <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
       return <View key={index} style={styles.row}>{rowArr}</View>
