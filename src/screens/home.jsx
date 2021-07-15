@@ -63,13 +63,28 @@ export default function homepage({playListener, lang, soundController, setSongSt
   if (!statistics) return (
     <SafeAreaView style={styles.container}>
       <View style={styles.heading}>
-        <Text style={styles.title}>MEMSOR</Text>
+        <Text style={styles.title}>MEMTRAIN</Text>
         <Text style={styles.caption}>Memory Training</Text>
       </View>
-      <View>
-        <TouchableHighlight onPress={() => {playListener(); playAudio('playButton')}} style={styles.playButton} >
+      <View style={styles.buttons}>
+        <TouchableHighlight onPress={playListener} style={styles.playButton} >
           <Text style={styles.playButtonTxt}>PLAY</Text>
         </TouchableHighlight>
+        <View style={styles.miniButtons}>
+          <TouchableHighlight style={[styles.songIcon, {backgroundColor: songState === 'true' ? '#940019': '#005e00'}]} onPress={controlSong}>
+            <Entypo name={'note'} color='white' size={45}></Entypo>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.starSquare} onPress={() => {
+            Linking.openURL("https://play.google.com/store/apps/details?id=com.tiagosansao.convertcase")
+          }}>
+            <Entypo name={'star'} color='white' size={50}></Entypo>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.starSquare} onPress={() => {
+            Alert.alert('How To Play', "There are 9 squares, when the game starts a random square will glow, top and down bars' color will show to you whether it is your time to play or not, if it's green it means you can click at the square which glowed previously for you, if you click the wrong square you will lose. You get one point for every sequence you complete, every time you get one point there will be one more square in the next sequence. You can check your points at the top bar. Pretty simple, right? ")
+          }}>
+            <Text style={{fontSize: 60, color: 'white'}}>?</Text>
+          </TouchableHighlight>
+        </View>
       </View>
       <View style={styles.statistics}>
         <Text style={styles.statisticH1}>Statistics</Text>

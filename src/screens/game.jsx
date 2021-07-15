@@ -21,7 +21,8 @@ export default function game({endListener, lang}) {
   // Sound (X)
   // Home stylization (X)
   // MULTI-LANGUAGE ( )
-
+  // Sound when player clicks ( )
+ 
   // AsyncStorage.clear(); // For test purposes
 
   // --------------
