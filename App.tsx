@@ -6,6 +6,7 @@ import AppLoading from 'expo-app-loading';
 import { Audio } from 'expo-av';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeModules, Platform } from 'react-native';
+import { acceptedLanguages } from './src/assets/languages/languages.json';
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -36,8 +37,7 @@ export default function App() {
       locale = NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0]
     }
     
-    const acceptedLocales = ["pt_BR", "en_US"];
-    acceptedLocales.forEach((acceptedLocale) => {
+    acceptedLanguages.forEach((acceptedLocale) => {
       if (acceptedLocale === locale) return setLanguage(locale);
     })
   }

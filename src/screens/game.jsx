@@ -21,24 +21,18 @@ export default function game({endListener, lang}) {
   // Intersitial ads ( )
   // Sound (X)
   // Home stylization (X)
-  // MULTI-LANGUAGE ( )
+  // MULTI-LANGUAGE ( X )
   // Sound when player clicks ( )
  
   // AsyncStorage.clear(); // For test purposes
 
   // --------------
 
-  // interface iSound {
-  //   'highlight': Sound,
-  //   'lost': Sound,
-  // }
-
   const [currentHIghlightedButton, setCurrentHighlightedButton] = useState(null);
   const [playerTime, setPlayerTime] = useState(false);
   const [currentSequenceIndex, setCurrentSequenceIndex] = useState(1);
   const [playerSequence, setPlayerSequence] = useState([]);
   const [gameState, setGameState] = useState("in-game");
-  const [sounds, setSounds] = useState/*<iSound>*/(false);
   const [sound, setSound] = useState();
   const [sequence, setSequence] = useState([]);
   const [rateOurAppPreference, setRateOurAppPreference] = useState(true);
@@ -152,14 +146,6 @@ export default function game({endListener, lang}) {
     await sound.sound.playAsync();
     return;
   }
-
-  // function unloadSounds() {
-  //   console.log('unloading');
-  //   for (let soundX in sounds) {
-  //     sounds[soundX].sound.unloadAsync();
-  //     console.log('unloaded -')
-  //   }
-  // }
 
   
   // --------------
