@@ -66,7 +66,7 @@ export default function homepage({playListener, lang, soundController, setSongSt
       </View>
       <View style={styles.buttons}>
         <TouchableHighlight underlayColor="#cf6b00" onPress={playListener} style={styles.playButton} >
-          <Text style={styles.playButtonTxt}>PLAY</Text>
+          <Text style={styles.playButtonTxt}>{translate("PLAY", lang)}</Text>
         </TouchableHighlight>
         <View style={styles.miniButtons}>
           <TouchableHighlight underlayColor="#cf6b00" style={[styles.songIcon, {backgroundColor: songState === 'true' ? '#940019': '#005e00'}]} onPress={controlSong}>
@@ -78,7 +78,7 @@ export default function homepage({playListener, lang, soundController, setSongSt
             <Entypo name={'star'} color='white' size={50}></Entypo>
           </TouchableHighlight>
           <TouchableHighlight underlayColor="#cf6b00" style={styles.starSquare} onPress={() => {
-            Alert.alert('How To Play', "There are 9 squares, when the game starts a random square will glow, top and down bars' color will show to you whether it is your time to play or not, if it's green it means you can click at the square which glowed previously for you, if you click the wrong square you will lose. You get one point for every sequence you complete, every time you get one point there will be one more square in the next sequence. You can check your points at the top bar. Pretty simple, right? ")
+            Alert.alert(translate("HOW_TO_PLAY", lang), translate("HOW_TO_PLAY_MESSAGE", lang))
           }}>
             <Text style={{fontSize: 60, color: 'white'}}>?</Text>
           </TouchableHighlight>

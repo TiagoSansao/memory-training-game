@@ -28,8 +28,6 @@ export default function App() {
   }, [])
 
   async function languageHandler() {
-    const storedLanguage = await AsyncStorage.getItem("language");
-    if (storedLanguage) return setLanguage(storedLanguage);
     let locale: string = "en_US"
 
     if (Platform.OS === "android") {
@@ -42,7 +40,6 @@ export default function App() {
     acceptedLocales.forEach((acceptedLocale) => {
       if (acceptedLocale === locale) return setLanguage(locale);
     })
-    return setLanguage("en_US");
   }
 
   async function loadSong() {

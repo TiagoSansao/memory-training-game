@@ -42,8 +42,8 @@ export default function game({endListener, lang}) {
   const [sound, setSound] = useState();
   const [sequence, setSequence] = useState([]);
   const [rateOurAppPreference, setRateOurAppPreference] = useState(true);
-  const [lostTextH1, setLostTextH1] = useState("YOU GOT");
-  const [lostRecord, setLostRecord] = useState("Record:");
+  const [lostTextH1, setLostTextH1] = useState(translate("LOST_MESSAGE", lang));
+  const [lostRecord, setLostRecord] = useState(translate("RECORD", lang));
   const [circles, setCircles] = useState([0,0,0,0,0,0,0,0,0,0]);
   const [gameTimer, setGameTimer]  = useState(0);
   const [statistics, setStatistics] = useState({});
@@ -184,8 +184,8 @@ export default function game({endListener, lang}) {
     setGameState("lost");
     if (currentSequenceIndex > statistics.record) {
       
-      setLostRecord("Previous Record:")
-      setLostTextH1("NEW RECORD")
+      setLostRecord(translate("PREVIOUS_RECORD", lang))
+      setLostTextH1(translate("NEW_RECORD", lang))
       if (rateOurAppPreference === true) {
         Alert.alert("Rate our app", "Could you rate our APP on Google Play Store? We'd be glad to know your opinion!", [
           {
@@ -219,8 +219,8 @@ export default function game({endListener, lang}) {
     setCurrentSequenceIndex(1);
     setGameState("in-game");
     setPlayerSequence([]);
-    setLostTextH1("YOU GOT");
-    setLostRecord("Record:");
+    setLostTextH1(translate("LOST_MESSAGE", lang));
+    setLostRecord(translate("RECORD", lang));
     setCircles([0,0,0,0,0,0,0,0,0,0]);
     setGameTimer(0);
     setCurrentHighlightedButton(localSequence[0]);
@@ -313,10 +313,10 @@ export default function game({endListener, lang}) {
     <SafeAreaView style={styles.container}>
       { gameState === "lost" && 
         <View style={styles.lostScreen}>
-          <Text style={styles.lostTextH1}>{lostTextH1}{"\n"}{currentSequenceIndex} POINTS!</Text>
+          <Text style={styles.lostTextH1}>{lostTextH1}{"\n"}{currentSequenceIndex} {translate("POINTS", lang)}!</Text>
           <View style={styles.endScreenButtonsView}>
-            <TouchableOpacity onPress={() => {startNewGame();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>TRY AGAIN</Text></TouchableOpacity>
-            <TouchableOpacity onPress={() => {endListener();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>HOME</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => {startNewGame();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>{translate("TRY_AGAIN", lang)}</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => {endListener();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>{translate("HOME", lang)}</Text></TouchableOpacity>
           </View>
           <View style={styles.dataDisplay}>
             <Text style={styles.lostTextH2}>{lostRecord} {statistics.record}</Text>
@@ -325,8 +325,8 @@ export default function game({endListener, lang}) {
         </View>
       }
       <View style={styles.heading}>
-        <Text style={styles.title}>MEMTRAIN</Text>
-        <Text style={styles.caption}>Memory Training</Text>
+        <Text style={styles.title}>{translate("NAME", lang)}</Text>
+        <Text style={styles.caption}>{translate("CAPTION", lang)}</Text>
       </View>
       <View style={[styles.statusLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>{getCircles()}</View>
       <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
