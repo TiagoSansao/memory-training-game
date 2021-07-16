@@ -81,13 +81,13 @@
       "pt_BR": "Há 9 quadrados, ao jogo começar, um quadrado aleatório irá brilhar, as cores da barra superior e inferior indicarão se é sua vez de jogar, caso a cor seja verde significa que é, então,  você deve clicar no último quadrado que brilhou, ao clicar no quadrado errado, você perderá. Ganha-se um ponto para cada sequência completa, a cada sequência completa, a próxima terá um quadrado a mais. Você pode checar seus pontos na barra superior, bem simples, certo? ",
       "en_US": "There are 9 squares, when the game starts a random square will glow, top and down bars' color will show to you whether it is your time to play or not, if it's green it means you can click at the square which glowed previously for you, if you click the wrong square you will lose. You get one point for every sequence you complete, every time you get one point there will be one more square in the next sequence. You can check your points at the top bar. Pretty simple, right?"
     },
-    "": {
-      "pt_BR": "",
-      "en_US": ""
+    "BELOW_AVERAGE": {
+      "pt_BR": "ABAIXOU DA\nSUA MÉDIA",
+      "en_US": "BELOW\nYOUR AVERAGE"
     },
-    "": {
-      "pt_BR": "",
-      "en_US": ""
+    "ABOVE_AVERAGE": {
+      "pt_BR": "ACIMA DA\nSUA MÉDIA",
+      "en_US": "ABOVE\nYOUR AVERAGE"
     },
     "": {
       "pt_BR": "",

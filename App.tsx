@@ -20,7 +20,7 @@ export default function App() {
   const [dataLoaded, setDataLoaded] = useState<boolean>(false);
   const [sound, setSound] = useState<any>();
   const [songState, setSongState] = useState<string>("true");
-  const [language, setLanguage] = useState<string>();
+  const [language, setLanguage] = useState<string>("en_US");
   
 
   useEffect(() => {
@@ -28,7 +28,14 @@ export default function App() {
     loadSong();
   }, [])
 
+  useEffect(() => {
+    AsyncStorage.setItem("language", language);
+  }, [language])
+
   async function languageHandler() {
+    const storedLanguage = await AsyncStorage.getItem("language");
+    if (storedLanguage) return setLanguage(storedLanguage);
+
     let locale: string = "en_US"
 
     if (Platform.OS === "android") {
@@ -81,8 +88,17 @@ export default function App() {
     sound.playAsync();
     setTimeout(() => {sound.unloadAsync()}, 1000);
   }
+
+  function switchLanguage() {
+    const currentLangIndex = acceptedLanguages.indexOf(language); 
+    const quantityOfLangs = acceptedLanguages.length;
+    if (currentLangIndex === quantityOfLangs - 1) {
+      return setLanguage(acceptedLanguages[0]);
+    }
+    return setLanguage(acceptedLanguages[currentLangIndex + 1]);
+  }
   
-  if (screen === "homepage") return <Homepage lang={language} songState={songState} setSongState={setSongState} soundController={sound} playListener={playListener}/>
+  if (screen === "homepage") return <Homepage switchLanguage={switchLanguage} lang={language} songState={songState} setSongState={setSongState} soundController={sound} playListener={playListener}/>
   return <Game lang={language} endListener={endListener}/>
   
 }

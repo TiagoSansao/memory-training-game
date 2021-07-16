@@ -40,12 +40,17 @@ export default StyleSheet.create({
     justifyContent: 'space-around'
   },
   lostScreen: {
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 35,
+    paddingBottom: 35,
     position: 'absolute',
     alignSelf: 'center',
+    justifyContent: 'space-evenly',
     top: 100,
     zIndex: 10,
     width: width*0.80,
-    height: width*0.80 + 60,
+    height: width*0.80 + 70,
     opacity: 0.9,
     backgroundColor: 'black',
   },
@@ -54,15 +59,15 @@ export default StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontSize: 25,
-    marginTop: 30,
     lineHeight: 35,
   },
   lostTextH2: {
     fontFamily: 'press-start',
     color: 'white',
     textAlign: 'left',
-    fontSize: 15,
-    marginLeft: 20,
+    fontSize: 20,
+    textAlign: 'center',
+    marginTop: 5,
     
   },
   title: {

@@ -5,13 +5,19 @@ import { Entypo } from '@expo/vector-icons';
 import styles from '../styles/homeStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import translate from '../utils/translate';
+import { acceptedLanguages } from '../assets/languages/languages.json';
 
 
-export default function homepage({playListener, lang, soundController, setSongState, songState}) {
+export default function homepage({playListener, lang, soundController, setSongState, songState, switchLanguage}) {
   
   const [statistics, setStatistics] = useState({});
   const [sound, setSound] = useState();
   
+  const flags = {
+    pt_BR: require('../assets/images/flags/pt_BR.png'),
+    en_US: require('../assets/images/flags/en_US.png')
+  }
+
   useEffect(() => {
       getStatistics();
   }, []);
@@ -57,6 +63,8 @@ export default function homepage({playListener, lang, soundController, setSongSt
     setSound(sound);
     await sound.sound.playAsync();
   }
+
+  
   
   return (
     <SafeAreaView style={styles.container}>
@@ -71,6 +79,9 @@ export default function homepage({playListener, lang, soundController, setSongSt
         <View style={styles.miniButtons}>
           <TouchableHighlight underlayColor="#cf6b00" style={[styles.songIcon, {backgroundColor: songState === 'true' ? '#940019': '#005e00'}]} onPress={controlSong}>
             <Entypo name={'note'} color='white' size={45}></Entypo>
+          </TouchableHighlight>
+          <TouchableHighlight underlayColor="#cf6b00" style={styles.starSquare} onPress={switchLanguage}>
+            <Image style={{width: 50, height: 50}} source={flags[lang]}></Image>
           </TouchableHighlight>
           <TouchableHighlight underlayColor="#cf6b00" style={styles.starSquare} onPress={() => {
             Linking.openURL("https://play.google.com/store/apps/details?id=com.tiagosansao.convertcase")

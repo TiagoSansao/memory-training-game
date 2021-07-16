@@ -293,6 +293,21 @@ export default function game({endListener, lang}) {
     return circlesEl;
   }
 
+  function analyticsString(averageScore, currentScore) {
+    let percentage, text, color;
+    if (currentScore > averageScore) {
+      percentage = currentScore / averageScore;
+      text = "ABOVE_AVERAGE";
+      color = "#21c44d";
+    } else {
+      percentage = averageScore / currentScore; 
+      text = "BELOW_AVERAGE";
+      color = "#e82727";
+    }
+    const element = <Text style={styles.lostTextH2}>{<Text style={{color: color}}>{(percentage * 100).toFixed(0)}%</Text>} {translate(text, lang)}</Text>
+    return element;
+  }
+
   // --------------
 
   return (
@@ -305,8 +320,7 @@ export default function game({endListener, lang}) {
             <TouchableOpacity onPress={() => {endListener();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>{translate("HOME", lang)}</Text></TouchableOpacity>
           </View>
           <View style={styles.dataDisplay}>
-            <Text style={styles.lostTextH2}>{lostRecord} {statistics.record}</Text>
-            <Text style={styles.lostTextH2}>Rank: #{statistics.record}</Text>
+          {analyticsString(statistics.averageScore, currentSequenceIndex)}
           </View>
         </View>
       }
