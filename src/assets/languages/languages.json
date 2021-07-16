@@ -2,8 +2,108 @@
   "acceptedLanguages": ["pt_BR", "en_US"],
   "translations": {
     "NAME": {
+      "pt_BR": "MEMTRAIN",
+      "en_US": "MEMTRAIN"
+    },
+    "CAPTION": {
+      "pt_BR": "MEMORY TRAINING",
+      "en_US": "TREINO DE MEMÓRIA"
+    },
+    "PLAY": {
+      "pt_BR": "JOGAR",
+      "en_US": "PLAY"
+    },
+    "STATISTICS": {
+      "pt_BR": "Estatísticas",
+      "en_US": "Statistics"
+    },
+    "LAST_SCORE": {
+      "pt_BR": "Última Pontuação:",
+      "en_US": "Last Score:"
+    },
+    "AVERAGE_SCORE": {
+      "pt_BR": "Pontuação Média:",
+      "en_US": "Average Score:"
+    },
+    "RECORD": {
+      "pt_BR": "Recorde:",
+      "en_US": "Record:"
+    },
+    "TRY_AGAIN": {
+      "pt_BR": "TRY AGAIN",
+      "en_US": "TENTAR NOVAMENTE"
+    },
+    "HOME": {
+      "pt_BR": "INÍCIO",
+      "en_US": "HOME"
+    },
+    "RATE_OUR_APP": {
+      "pt_BR": "Avalie nosso app",
+      "en_US": "Rate our app"
+    },
+    "RATE_MESSAGE": {
+      "pt_BR": "Você poderia avaliar nosso aplicativo na Play Store? Nós ficariamos muito felizes em saber sua opinião!",
+      "en_US": "Could you rate our APP on Google Play Store? We'd be glad to know your opinion!"
+    },
+    "OK": {
+      "pt_BR": "Ok",
+      "en_US": "Ok"
+    },
+    "LATER": {
+      "pt_BR": "Depois",
+      "en_US": "Later"
+    },
+    "NEVER_ASK_AGAIN": {
+      "pt_BR": "Não perguntar novamente",
+      "en_US": "Never ask again"
+    },
+    "": {
       "pt_BR": "",
-      "en_US": "Memory Training"
+      "en_US": ""
+    },
+    "": {
+      "pt_BR": "",
+      "en_US": ""
+    },
+    "": {
+      "pt_BR": "",
+      "en_US": ""
+    },
+    "": {
+      "pt_BR": "",
+      "en_US": ""
+    },
+    "": {
+      "pt_BR": "",
+      "en_US": ""
+    },
+    "": {
+      "pt_BR": "",
+      "en_US": ""
+    },
+    "": {
+      "pt_BR": "",
+      "en_US": ""
+    },
+    "": {
+      "pt_BR": "",
+      "en_US": ""
+    },
+    "": {
+      "pt_BR": "",
+      "en_US": ""
+    },
+    "": {
+      "pt_BR": "",
+      "en_US": ""
+    },
+    "": {
+      "pt_BR": "",
+      "en_US": ""
+    },
+    "": {
+      "pt_BR": "",
+      "en_US": ""
     }
   }
 }

@@ -4,6 +4,7 @@ import * as Linking from 'expo-linking';
 import { Audio } from 'expo-av';
 import styles from '../styles/gameStyles';
 import {  Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert } from 'react-native';
+import translate from '../utils/translate';
 
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -265,7 +266,7 @@ export default function game({endListener, lang}) {
     }
 
     for (let i = 0; i < buttonsQuantity; i += 1) {
-      buttonsArr.push(<TouchableHighlight underlayColor="#e82c39" disabled={!playerTime} key={`btn${i}`} onPress={() => {pressListener(i)}} style={[{backgroundColor: i === currentHIghlightedButton ? '#1deef2' : '#be0dd9' }, styles.button]} ><Text></Text></TouchableHighlight>)
+      buttonsArr.push(<TouchableHighlight underlayColor="#cf6b00" disabled={!playerTime} key={`btn${i}`} onPress={() => {pressListener(i)}} style={[{backgroundColor: i === currentHIghlightedButton ? '#1deef2' : '#be0dd9' }, styles.button]} ><Text></Text></TouchableHighlight>)
     }
     
     buttonsWithRowsArr.forEach((row) => {
@@ -308,9 +309,9 @@ export default function game({endListener, lang}) {
 
   // --------------
 
-  if (gameState === "lost") {
-    return (
-      <SafeAreaView style={styles.container}>
+  return (
+    <SafeAreaView style={styles.container}>
+      { gameState === "lost" && 
         <View style={styles.lostScreen}>
           <Text style={styles.lostTextH1}>{lostTextH1}{"\n"}{currentSequenceIndex} POINTS!</Text>
           <View style={styles.endScreenButtonsView}>
@@ -322,47 +323,26 @@ export default function game({endListener, lang}) {
             <Text style={styles.lostTextH2}>Rank: #{statistics.record}</Text>
           </View>
         </View>
-        <View style={styles.heading}>
-          <Text style={styles.title}>MEMTRAIN</Text>
-          <Text style={styles.caption}>Memory Training</Text>
-        </View>
-        <View style={[styles.statusLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>{getCircles()}</View>
-        <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
-          return <View key={index} style={styles.row}>{rowArr}</View>
-        }))}</View>
-        <View style={[styles.timerLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>
-          <View style={[styles.slider, {width: ((width * 0.80) - 20) * ((gameTimer / 10) * 2 ),}]}></View>
-        </View>
-        <View style={styles.statistics}>
-          <Text style={styles.statisticH1}>Statistics</Text>
-          <Text style={styles.statisticData}>Last Score: {statistics.lastScore ? statistics.lastScore : 'no data'}</Text>
-          <Text style={styles.statisticData}>Average Score: {statistics.averageScore ? statistics.averageScore + ` (${statistics.gamesLength} games)` : 'no data'} </Text>
-          <Text style={styles.statisticData}>Record: {statistics.record ? statistics.record : 'no data'}</Text>
-        </View>
-      </SafeAreaView>
-      )
-  }
-
-  return (
-  <SafeAreaView style={styles.container}>
-    <View style={styles.heading}>
-      <Text style={styles.title}>MEMTRAIN</Text>
-      <Text style={styles.caption}>Memory Training</Text>
-    </View>
-    <View style={[styles.statusLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>{getCircles()}</View>
-    <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
-      return <View key={index} style={styles.row}>{rowArr}</View>
-    }))}</View>
-    <View style={[styles.timerLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>
-      <View style={[styles.slider, {width: ((width * 0.80) - 20) * ((gameTimer / 10) * 2 ),}]}></View>
-    </View>
-    <View style={styles.statistics}>
-      <Text style={styles.statisticH1}>Statistics</Text>
-      <Text style={styles.statisticData}>Last Score: {statistics.lastScore ? statistics.lastScore : 'no data'}</Text>
-      <Text style={styles.statisticData}>Average Score: {statistics.averageScore ? statistics.averageScore + ` (${statistics.gamesLength} games)` : 'no data'} </Text>
-      <Text style={styles.statisticData}>Record: {statistics.record ? statistics.record : 'no data'}</Text>
-    </View>
-  </SafeAreaView>
+      }
+      <View style={styles.heading}>
+        <Text style={styles.title}>MEMTRAIN</Text>
+        <Text style={styles.caption}>Memory Training</Text>
+      </View>
+      <View style={[styles.statusLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>{getCircles()}</View>
+      <View style={styles.btnContainer}>{buttons().map(((rowArr, index) => {
+        return <View key={index} style={styles.row}>{rowArr}</View>
+      }))}</View>
+      <View style={[styles.timerLine, {backgroundColor: playerTime ? '#21c44d' : '#e82727'}]}>
+        <View style={[styles.slider, {width: ((width * 0.80) - 20) * ((gameTimer / 10) * 2 ),}]}></View>
+      </View>
+      <View style={styles.statistics}>
+        <Text style={styles.statisticH1}>{translate("STATISTICS", lang)}</Text>
+        <Text style={styles.statisticData}>{translate("LAST_SCORE", lang)} {statistics.lastScore ? statistics.lastScore : 'no data'}</Text>
+        <Text style={styles.statisticData}>{translate("AVERAGE_SCORE", lang)} {statistics.averageScore ? statistics.averageScore + ` (${statistics.gamesLength} games)` : 'no data'} </Text>
+        <Text style={styles.statisticData}>{translate("RECORD", lang)} {statistics.record ? statistics.record : 'no data'}</Text>
+      </View>
+    </SafeAreaView>
   )
+
 };
 

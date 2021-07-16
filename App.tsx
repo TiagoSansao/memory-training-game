@@ -85,8 +85,6 @@ export default function App() {
     setTimeout(() => {sound.unloadAsync()}, 1000);
   }
   
-
-
   if (screen === "homepage") return <Homepage lang={language} songState={songState} setSongState={setSongState} soundController={sound} playListener={playListener}/>
   return <Game lang={language} endListener={endListener}/>
   
