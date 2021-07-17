@@ -173,7 +173,7 @@ export default function game({endListener, lang}) {
       setLostRecord(translate("PREVIOUS_RECORD", lang))
       setLostTextH1(translate("NEW_RECORD", lang))
       if (rateOurAppPreference === true) {
-        Alert.alert("Rate our app", "Could you rate our APP on Google Play Store? We'd be glad to know your opinion!", [
+        Alert.alert(translate("RATE_OUR_APP", lang), translate("RATE_MESSAGE", lang), [
           {
             text: "Ok",
             onPress: async () => {

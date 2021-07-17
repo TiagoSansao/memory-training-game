@@ -5,8 +5,7 @@ import { Entypo } from '@expo/vector-icons';
 import styles from '../styles/homeStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import translate from '../utils/translate';
-import { acceptedLanguages } from '../assets/languages/languages.json';
-
+import * as Linking from 'expo-linking';
 
 export default function homepage({playListener, lang, soundController, setSongState, songState, switchLanguage}) {
   
