@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Text, Image, View, SafeAreaView, TouchableHighlight } from 'react-native';
-import { Audio } from 'expo-av';
-import { Entypo } from '@expo/vector-icons';
-import styles from '../styles/homeStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import translate from '../utils/translate';
+import { Alert, Text, Image, View, SafeAreaView, TouchableHighlight } from 'react-native';
+import { Entypo } from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
+import styles from '../styles/homeStyles';
+import translate from '../utils/translate';
 
 interface iStatistics {
   games?: string[],
@@ -18,7 +17,6 @@ interface iStatistics {
 export default function homepage({playListener, lang, soundController, setSongState, songState, switchLanguage}) {
   
   const [statistics, setStatistics] = useState<iStatistics|boolean|any>({});
-  const [sound, setSound] = useState<Audio.Sound|any>();
   
   const flags = {
     pt_BR: require('../assets/images/flags/pt_BR.png'),
@@ -29,10 +27,6 @@ export default function homepage({playListener, lang, soundController, setSongSt
       getStatistics();
   }, []);
   
-  useEffect(() => {
-    return sound ? () => { sound.sound.unloadAsync(); }
-      : undefined;
-  }, [sound]);
 
   const getStatistics = async () => {
     try {
@@ -44,7 +38,7 @@ export default function homepage({playListener, lang, soundController, setSongSt
     }
   }
 
-  async function controlSong() {
+  async function controlSong(): Promise<void> {
     if (songState === 'true') {
       await soundController.pauseAsync();
       await AsyncStorage.setItem('music', 'false');
@@ -56,22 +50,6 @@ export default function homepage({playListener, lang, soundController, setSongSt
     setSongState('true');
     return;   
   }
-
-  
-  async function playAudio(whichAudio) {
-    let sound;
-    switch(whichAudio) {
-      case 'playButton':
-        sound = await Audio.Sound.createAsync(
-          require(`../assets/sounds/playButton.mp3`), {volume: 1}
-        )
-        break;
-    }
-    setSound(sound);
-    await sound.sound.playAsync();
-  }
-
-  
   
   return (
     <SafeAreaView style={styles.container}>

@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Linking from 'expo-linking';
+import { Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert, ImagePickerIOSStatic } from 'react-native';
 import { Audio } from 'expo-av';
-import styles from '../styles/gameStyles';
-import {  Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert, ImagePickerIOSStatic } from 'react-native';
+import * as Linking from 'expo-linking';
+import styles from '../styles/gameStyles.js';
 import translate from '../utils/translate';
 
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const { width } = Dimensions.get('window');
-
-
 
 export default function game({endListener, lang}) {
 

@@ -11,7 +11,6 @@ export default StyleSheet.create({
   },
   container: {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    backgroundColor: '#fff',
     flexDirection: 'column',
     backgroundColor: '#1d55f0',
     width: width,
@@ -64,7 +63,6 @@ export default StyleSheet.create({
   lostTextH2: {
     fontFamily: 'press-start',
     color: 'white',
-    textAlign: 'left',
     fontSize: 20,
     textAlign: 'center',
     marginTop: 5,
