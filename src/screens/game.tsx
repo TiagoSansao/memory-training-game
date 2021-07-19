@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Linking from 'expo-linking';
 import { Audio } from 'expo-av';
 import styles from '../styles/gameStyles';
-import {  Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert } from 'react-native';
+import {  Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert, ImagePickerIOSStatic } from 'react-native';
 import translate from '../utils/translate';
 
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -28,19 +28,30 @@ export default function game({endListener, lang}) {
 
   // --------------
 
-  const [currentHIghlightedButton, setCurrentHighlightedButton] = useState(null);
-  const [playerTime, setPlayerTime] = useState(false);
-  const [currentSequenceIndex, setCurrentSequenceIndex] = useState(1);
-  const [playerSequence, setPlayerSequence] = useState([]);
-  const [gameState, setGameState] = useState("in-game");
-  const [sound, setSound] = useState();
-  const [sequence, setSequence] = useState([]);
-  const [rateOurAppPreference, setRateOurAppPreference] = useState(true);
-  const [lostTextH1, setLostTextH1] = useState(translate("LOST_MESSAGE", lang));
-  const [lostRecord, setLostRecord] = useState(translate("RECORD", lang));
-  const [circles, setCircles] = useState([0,0,0,0,0,0,0,0,0,0]);
-  const [gameTimer, setGameTimer]  = useState(0);
-  const [statistics, setStatistics] = useState({});
+
+  interface iStatistics {
+    games?: string[],
+    averageScore?: string,
+    lastScore?: number,
+    gamesLength?: number,
+    record?: number,
+  }
+
+  type iStatisticsOrNull = iStatistics | any;
+
+  const [currentHIghlightedButton, setCurrentHighlightedButton] = useState<number|null>(null);
+  const [playerTime, setPlayerTime] = useState<boolean>(false);
+  const [currentSequenceIndex, setCurrentSequenceIndex] = useState<number>(1);
+  const [playerSequence, setPlayerSequence] = useState<number[]>([]);
+  const [gameState, setGameState] = useState<string>("in-game");
+  const [sound, setSound] = useState<any>();
+  const [sequence, setSequence] = useState<Array<number>>([]);
+  const [rateOurAppPreference, setRateOurAppPreference] = useState<boolean>(true);
+  const [lostTextH1, setLostTextH1] = useState<string>(translate("LOST_MESSAGE", lang));
+  const [lostRecord, setLostRecord] = useState<string>(translate("RECORD", lang));
+  const [circles, setCircles] = useState<number[]>([0,0,0,0,0,0,0,0,0,0]);
+  const [gameTimer, setGameTimer]  = useState<number>(0);
+  const [statistics, setStatistics] = useState<iStatistics|boolean|any>({});
 
 
   // -------------- 
@@ -67,16 +78,18 @@ export default function game({endListener, lang}) {
 
   // --------------
 
+
+  
   
   const setGameInStorageAndUpdateStatistics = async (lastScore) => {
     try {
-      let newStatistics = {};
-      let currentStatistics = await AsyncStorage.getItem('statistics');
+      let newStatistics:iStatistics|any = {};
+      let currentStatistics:string|null = await AsyncStorage.getItem('statistics');
       if (currentStatistics) {
         newStatistics = JSON.parse(currentStatistics);
-        newStatistics.games.push(lastScore);
-        newStatistics.averageScore = (newStatistics.games.reduce((totalScore, score ) => totalScore + score) / newStatistics.games.length).toFixed(1);
-        newStatistics.lastScore = lastScore;
+        newStatistics.games!.push(lastScore);
+        newStatistics.averageScore = (newStatistics.games!.reduce((totalScore, score ) => totalScore + score) / newStatistics.games!.length).toFixed(1);
+        newStatistics.record = lastScore;
         newStatistics.gamesLength = newStatistics.games.length;
         newStatistics.record = lastScore > newStatistics.record ? lastScore : newStatistics.record;
         setStatistics(newStatistics);
@@ -196,7 +209,7 @@ export default function game({endListener, lang}) {
 
 
   function startNewGame() {
-    const localSequence = [];
+    const localSequence:Array<number> = [];
     for(let i = 0; i < 100; i += 1) {
       localSequence.push(Math.floor(Math.random() * 9)); // generate sequence
     }
@@ -244,8 +257,8 @@ export default function game({endListener, lang}) {
   function buttons() {
     let buttonsQuantity = 9;
     let RowQuantity = 3;
-    let buttonsArr = [];
-    let buttonsWithRowsArr = [];
+    let buttonsArr:Array<JSX.Element> = [];
+    let buttonsWithRowsArr:Array<any> = [];
 
     for (let i = 0; i < RowQuantity; i += 1) {
       buttonsWithRowsArr.push([]);

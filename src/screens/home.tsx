@@ -7,10 +7,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import translate from '../utils/translate';
 import * as Linking from 'expo-linking';
 
+interface iStatistics {
+  games?: string[],
+  averageScore?: string,
+  lastScore?: number,
+  gamesLength?: number,
+  record?: number,
+}
+
 export default function homepage({playListener, lang, soundController, setSongState, songState, switchLanguage}) {
   
-  const [statistics, setStatistics] = useState({});
-  const [sound, setSound] = useState();
+  const [statistics, setStatistics] = useState<iStatistics|boolean|any>({});
+  const [sound, setSound] = useState<Audio.Sound|any>();
   
   const flags = {
     pt_BR: require('../assets/images/flags/pt_BR.png'),

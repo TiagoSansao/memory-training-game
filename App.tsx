@@ -55,7 +55,7 @@ export default function App() {
     if (shouldPlayBool === null || shouldPlayBool === undefined) shouldPlayBool = "true";
     
     const { sound } = await Audio.Sound.createAsync(
-      require('./src/assets/sounds/song.wav'), { volume: 0.5, isLooping: true }
+      require('./src/assets/sounds/song.wav'), { volume: 0.7, isLooping: true }
     )
     setSound(sound);
     setSongState(shouldPlayBool);
