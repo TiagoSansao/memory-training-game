@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert, ImagePickerIOSStatic } from 'react-native';
 import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
-import styles from '../styles/gameStyles.js';
+import styles from '../styles/gameStyles';
 import translate from '../utils/translate';
 
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
