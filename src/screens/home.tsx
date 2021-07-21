@@ -69,7 +69,7 @@ export default function homepage({playListener, lang, soundController, setSongSt
             <Image style={{width: 50, height: 50}} source={flags[lang]}></Image>
           </TouchableHighlight>
           <TouchableHighlight underlayColor="#cf6b00" style={styles.starSquare} onPress={() => {
-            Linking.openURL("https://play.google.com/store/apps/details?id=com.tiagosansao.convertcase")
+            Linking.openURL("https://play.google.com/store/apps/details?id=tiagosansao.memorytraininggame")
           }}>
             <Entypo name={'star'} color='white' size={50}></Entypo>
           </TouchableHighlight>

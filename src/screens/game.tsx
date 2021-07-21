@@ -189,7 +189,7 @@ export default function game({endListener, lang}) {
             text: "Ok",
             onPress: async () => {
               await setDataInStorage("ok");
-              Linking.openURL("https://play.google.com/store/apps/details?id=com.tiagosansao.convertcase");
+              Linking.openURL("https://play.google.com/store/apps/details?id=tiagosansao.memorytraininggame");
             }
           },
           {
