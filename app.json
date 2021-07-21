@@ -25,7 +25,8 @@
         "backgroundColor": "#13233c"
       },
       "playStoreUrl": "https://play.google.com/store/apps/details?id=tiagosansao.memorytraininggame",
-      "package": "com.tiagosansao.memorytraininggame"
+      "package": "com.tiagosansao.memorytraininggame",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./src/assets/icon.png"
