@@ -134,13 +134,58 @@ export default function game({endListener, lang}) {
 
   // --------------
 
-  async function playAudio(whichAudio) {
+  async function playAudio(whichAudio: string, whichButton: number|null) {
     let sound;
     switch(whichAudio) {
       case 'highlight': 
-        sound = await Audio.Sound.createAsync(
-          require(`../assets/sounds/highlight.mp3`), {volume: 1}
-        );
+        console.log(whichButton);
+        switch(whichButton) {
+          case 0:
+            sound = await Audio.Sound.createAsync(
+              require(`../assets/sounds/buttons-sounds/0.wav`), {volume: 1}
+            );
+            break;
+          case 1:
+            sound = await Audio.Sound.createAsync(
+              require(`../assets/sounds/buttons-sounds/1.wav`), {volume: 1}
+            );
+            break;
+          case 2:
+            sound = await Audio.Sound.createAsync(
+              require(`../assets/sounds/buttons-sounds/2.wav`), {volume: 1}
+            );
+            break;
+          case 3:
+            sound = await Audio.Sound.createAsync(
+              require(`../assets/sounds/buttons-sounds/3.wav`), {volume: 1}
+            );
+            break;
+          case 4:
+            sound = await Audio.Sound.createAsync(
+              require(`../assets/sounds/buttons-sounds/4.wav`), {volume: 1}
+            );
+            break;
+          case 5:
+            sound = await Audio.Sound.createAsync(
+              require(`../assets/sounds/buttons-sounds/5.wav`), {volume: 1}
+            );
+            break;
+          case 6:
+            sound = await Audio.Sound.createAsync(
+              require(`../assets/sounds/buttons-sounds/6.wav`), {volume: 1}
+            );
+            break;
+          case 7:
+            sound = await Audio.Sound.createAsync(
+              require(`../assets/sounds/buttons-sounds/7.wav`), {volume: 1}
+            );
+            break;
+          case 8:
+            sound = await Audio.Sound.createAsync(
+              require(`../assets/sounds/buttons-sounds/8.wav`), {volume: 1}
+            );
+            break;
+        }
         break;
       case 'playButton':
         sound = await Audio.Sound.createAsync(
@@ -165,7 +210,7 @@ export default function game({endListener, lang}) {
   async function highlightSequence(newCurrentSequenceIndex) {
     for (let i = 0; i < newCurrentSequenceIndex; i += 1) {
       await timer(100);
-      playAudio('highlight');
+      playAudio('highlight', sequence[i]);
       setCurrentHighlightedButton(sequence[i]);
       await timer(500);
       setCurrentHighlightedButton(null);
@@ -175,7 +220,7 @@ export default function game({endListener, lang}) {
   }
 
   async function lostGame() {
-    playAudio('lost');
+    playAudio('lost', null);
     setGameInStorageAndUpdateStatistics(currentSequenceIndex);
     setPlayerTime(false);
     setGameState("lost");
@@ -221,7 +266,7 @@ export default function game({endListener, lang}) {
     setCircles([0,0,0,0,0,0,0,0,0,0]);
     setGameTimer(0);
     setCurrentHighlightedButton(localSequence[0]);
-    playAudio('highlight');
+    playAudio('highlight', localSequence[0]);
     setTimeout(() => {
       setCurrentHighlightedButton(null);
       setPlayerTime(true);
@@ -230,6 +275,7 @@ export default function game({endListener, lang}) {
   
   function pressListener(btnIndex) {
     if (playerTime !== true) return;
+    playAudio("highlight", btnIndex);
     const newPlayerSequence = [...playerSequence, btnIndex];
     setPlayerSequence(newPlayerSequence);
     newPlayerSequence.forEach( async (playerValue, index) => {
