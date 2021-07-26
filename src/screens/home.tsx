@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert, Text, Image, View, SafeAreaView, TouchableHighlight } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
+import { InterstitialAdManager } from 'react-native-fbads'
 import * as Linking from 'expo-linking';
 import styles from '../styles/homeStyles';
 import translate from '../utils/translate';
+import config from '../../config/config';
 
 interface iStatistics {
   games?: string[],
@@ -25,6 +27,9 @@ export default function homepage({playListener, lang, soundController, setSongSt
 
   useEffect(() => {
       getStatistics();
+      InterstitialAdManager.showAd(config.AD_INTERSTICIAL_01_AD)
+      .then((didClick) => {})
+      .catch((error) => {console.log(error)});
   }, []);
   
 

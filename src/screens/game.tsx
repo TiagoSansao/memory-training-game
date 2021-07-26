@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert, ImagePickerIOSStatic } from 'react-native';
+import { Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert} from 'react-native';
 import { Audio } from 'expo-av';
-import { InterstitialAdManager } from "expo-ads-facebook";
 import * as Linking from 'expo-linking';
 import styles from '../styles/gameStyles';
 import translate from '../utils/translate';
@@ -14,12 +13,6 @@ const { width } = Dimensions.get('window');
 
 export default function game({endListener, lang}) {
 
-
-  useEffect(() => {
-    InterstitialAdManager.showAd(config.AD_INTERSTICIAL_01_AD).then((clicked) => {
-      console.log('executed');
-    }).catch((error) => {console.log(console.log(error))})
-  }, [])
 
   // TODO:
   // Timer (X)
@@ -63,9 +56,6 @@ export default function game({endListener, lang}) {
 
   // -------------- 
 
-  console.log(process.env.FACEBOOK_APP_ID);
-
-  
   useEffect(() => {
     if (!playerTime) return setGameTimer(0);
     const timerInterval = setInterval(() => {
@@ -242,18 +232,18 @@ export default function game({endListener, lang}) {
       if (rateOurAppPreference === true) {
         Alert.alert(translate("RATE_OUR_APP", lang), translate("RATE_MESSAGE", lang), [
           {
-            text: "Ok",
+            text: translate("OK", lang),
             onPress: async () => {
               await setDataInStorage("ok");
               Linking.openURL("https://play.google.com/store/apps/details?id=com.tiagosansao.memorytraininggame");
             }
           },
           {
-            text: "Later",
+            text: translate("LATER", lang),
             onPress: () => {setDataInStorage("later")}
           },
           {
-            text: "Never ask again",
+            text: translate("NEVER_ASK_AGAIN", lang),
             onPress: () => {setDataInStorage("never")}
           }
         ])

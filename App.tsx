@@ -8,6 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeModules, Platform } from 'react-native';
 import { acceptedLanguages } from './src/assets/languages/languages.json';
 
+
+
 const fetchFonts = () => {
   return Font.loadAsync({
     'press-start': require('./src/assets/fonts/PressStart2P-Regular.ttf')
