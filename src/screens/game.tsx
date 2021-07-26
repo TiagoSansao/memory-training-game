@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert, ImagePickerIOSStatic } from 'react-native';
 import { Audio } from 'expo-av';
+import { InterstitialAdManager } from "expo-ads-facebook";
 import * as Linking from 'expo-linking';
 import styles from '../styles/gameStyles';
 import translate from '../utils/translate';
+import config from "../../config/config";
 
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -13,6 +15,12 @@ const { width } = Dimensions.get('window');
 export default function game({endListener, lang}) {
 
 
+  useEffect(() => {
+    InterstitialAdManager.showAd(config.AD_INTERSTICIAL_01_AD).then((clicked) => {
+      console.log('executed');
+    }).catch((error) => {console.log(console.log(error))})
+  }, [])
+
   // TODO:
   // Timer (X)
   // Go to menu button (X)
@@ -20,7 +28,8 @@ export default function game({endListener, lang}) {
   // Sound (X)
   // Home stylization (X)
   // MULTI-LANGUAGE ( X )
-  // Sound when player clicks ( )
+  // Sound when player clicks ( X )
+  // Continue from where you stopped using video ads ( )
  
   // AsyncStorage.clear(); // For test purposes
 
@@ -53,6 +62,9 @@ export default function game({endListener, lang}) {
 
 
   // -------------- 
+
+  console.log(config.FACEBOOK_APP_ID);
+
   
   useEffect(() => {
     if (!playerTime) return setGameTimer(0);
@@ -138,7 +150,6 @@ export default function game({endListener, lang}) {
     let sound;
     switch(whichAudio) {
       case 'highlight': 
-        console.log(whichButton);
         switch(whichButton) {
           case 0:
             sound = await Audio.Sound.createAsync(
@@ -234,7 +245,7 @@ export default function game({endListener, lang}) {
             text: "Ok",
             onPress: async () => {
               await setDataInStorage("ok");
-              Linking.openURL("https://play.google.com/store/apps/details?id=tiagosansao.memorytraininggame");
+              Linking.openURL("https://play.google.com/store/apps/details?id=com.tiagosansao.memorytraininggame");
             }
           },
           {
