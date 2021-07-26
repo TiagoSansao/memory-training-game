@@ -17,11 +17,11 @@ export default function game({endListener, lang}) {
   // TODO:
   // Timer (X)
   // Go to menu button (X)
-  // Intersitial ads ( )
   // Sound (X)
   // Home stylization (X)
   // MULTI-LANGUAGE ( X )
   // Sound when player clicks ( X )
+  // Intersitial ads ( )
   // Continue from where you stopped using video ads ( )
  
   // AsyncStorage.clear(); // For test purposes
@@ -36,8 +36,6 @@ export default function game({endListener, lang}) {
     gamesLength?: number,
     record?: number,
   }
-
-  type iStatisticsOrNull = iStatistics | any;
 
   const [currentHIghlightedButton, setCurrentHighlightedButton] = useState<number|null>(null);
   const [playerTime, setPlayerTime] = useState<boolean>(false);
@@ -351,9 +349,11 @@ export default function game({endListener, lang}) {
     return circlesEl;
   }
 
-  function analyticsString(averageScore, currentScore) {
+  function analyticsString(averageScore: number, currentScore: number) {
     let percentage, text, color;
-    if (currentScore > averageScore) {
+    if (averageScore == currentScore || !averageScore) {
+      return <Text></Text>
+    } else if (currentScore > averageScore) {
       percentage = currentScore / averageScore;
       text = "ABOVE_AVERAGE";
       color = "#21c44d";
