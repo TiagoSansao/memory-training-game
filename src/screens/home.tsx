@@ -27,9 +27,9 @@ export default function homepage({playListener, lang, soundController, setSongSt
 
   useEffect(() => {
       getStatistics();
-      InterstitialAdManager.showAd(config.AD_INTERSTICIAL_01_AD)
-      .then((didClick) => {})
-      .catch((error) => {console.log(error)});
+      // InterstitialAdManager.showAd(config.AD_INTERSTICIAL_01_AD)
+      // .then((didClick) => {})
+      // .catch((error) => {console.log(error)});
   }, []);
   
 
@@ -74,7 +74,7 @@ export default function homepage({playListener, lang, soundController, setSongSt
             <Image style={{width: 50, height: 50}} source={flags[lang]}></Image>
           </TouchableHighlight>
           <TouchableHighlight underlayColor="#cf6b00" style={styles.starSquare} onPress={() => {
-            Linking.openURL("https://play.google.com/store/apps/details?id=com.tiagosansao.memorytraininggamegit")
+            Linking.openURL("https://play.google.com/store/apps/details?id=com.tiagosansao.memorytraininggame")
           }}>
             <Entypo name={'star'} color='white' size={50}></Entypo>
           </TouchableHighlight>
