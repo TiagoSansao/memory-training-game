@@ -75,3 +75,4 @@ web-build/
 .env.ts
 .env
 config.ts
+app.config.ts

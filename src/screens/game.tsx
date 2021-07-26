@@ -63,7 +63,7 @@ export default function game({endListener, lang}) {
 
   // -------------- 
 
-  console.log(config.FACEBOOK_APP_ID);
+  console.log(process.env.FACEBOOK_APP_ID);
 
   
   useEffect(() => {
