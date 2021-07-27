@@ -87,7 +87,7 @@ export default function game({endListener, lang}) {
         newStatistics = JSON.parse(currentStatistics);
         newStatistics.games!.push(lastScore);
         newStatistics.averageScore = (newStatistics.games!.reduce((totalScore, score ) => totalScore + score) / newStatistics.games!.length).toFixed(1);
-        newStatistics.record = lastScore;
+        newStatistics.lastScore = lastScore;
         newStatistics.gamesLength = newStatistics.games.length;
         newStatistics.record = lastScore > newStatistics.record ? lastScore : newStatistics.record;
         setStatistics(newStatistics);
