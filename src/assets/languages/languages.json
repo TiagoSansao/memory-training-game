@@ -74,10 +74,14 @@
       "en_US": "POINTS"
     },
     "HOW_TO_PLAY": {
-      "pt_BR": "Como jogar",
-      "en_US": "How to play"
+      "pt_BR": "Contate o desenvolvedor ",
+      "en_US": "Contact the developer"
     },
     "HOW_TO_PLAY_MESSAGE": {
+      "pt_BR": "Algo errado aconteceu? Ou você tem uma boa sugestão? Independente do que for, se você quiser entrar em contato com o desenvolvedor, mande um email para:\ntiagossansao@gmail.com",
+      "en_US": "Something wrong happend? Or you have a cool suggestion? Independently of the matter, if you want to get in contact with the developer, send an email to:\ntiagossansao@gmail.com"
+    },
+    "HOW_TO_PLAY_MESSAGE_2": {
       "pt_BR": "Há 9 quadrados, ao jogo começar, um quadrado aleatório irá brilhar, as cores da barra superior e inferior indicarão se é sua vez de jogar, caso a cor seja verde significa que é, então,  você deve clicar no último quadrado que brilhou, ao clicar no quadrado errado, você perderá. Ganha-se um ponto para cada sequência completa, a cada sequência completa, a próxima terá um quadrado a mais. Você pode checar seus pontos na barra superior, bem simples, certo? ",
       "en_US": "There are 9 squares, when the game starts a random square will glow, top and down bars' color will show to you whether it is your time to play or not, if it's green it means you can click at the square which glowed previously for you, if you click the wrong square you will lose. You get one point for every sequence you complete, every time you get one point there will be one more square in the next sequence. You can check your points at the top bar. Pretty simple, right?"
     },
