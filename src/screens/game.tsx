@@ -9,6 +9,7 @@ import config from "../../config/config";
 
 
 const { UnityAdsModule } = NativeModules;
+
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 const { width } = Dimensions.get('window');
 
@@ -66,7 +67,7 @@ export default function game({endListener, lang}) {
 
 
   useEffect(() => {
-    console.log(NativeModules);
+    UnityAdsModule.test();
     retrieveDataFromStorage();
     startNewGame();
   }, [])
