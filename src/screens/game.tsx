@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert} from 'react-native';
+import { Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert, NativeModules} from 'react-native';
 import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
 import styles from '../styles/gameStyles';
 import translate from '../utils/translate';
 import config from "../../config/config";
 
-const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
+const { UnityAdsModule } = NativeModules;
+const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 const { width } = Dimensions.get('window');
 
 export default function game({endListener, lang}) {
@@ -65,8 +66,9 @@ export default function game({endListener, lang}) {
 
 
   useEffect(() => {
-      retrieveDataFromStorage();
-      startNewGame();
+    console.log(NativeModules);
+    retrieveDataFromStorage();
+    startNewGame();
   }, [])
 
   useEffect(() => {
