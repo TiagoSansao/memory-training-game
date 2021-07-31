@@ -11,14 +11,13 @@ import com.facebook.react.bridge.ReactMethod;
 
 import android.view.View;
 
-
 public class UnityAdsModule extends ReactContextBaseJavaModule implements View.OnClickListener, IUnityAdsListener {
 
   UnityAdsModule(ReactApplicationContext context) {
     super(context);
   }
 
-  UnityAdsSub sub = new UnityAdsSub();
+//  UnityAdsSub sub = new UnityAdsSub();
 
   public String getName() {
     return "UnityAdsModule";
@@ -27,10 +26,10 @@ public class UnityAdsModule extends ReactContextBaseJavaModule implements View.O
   @ReactMethod
   public void test() {
     System.out.println("Test");
-    sub.DisplayInterstitialAd();
+   // sub.DisplayInterstitialAd();
   }
 
-//
+  //
 
   @Override
   public void onClick(View v) {

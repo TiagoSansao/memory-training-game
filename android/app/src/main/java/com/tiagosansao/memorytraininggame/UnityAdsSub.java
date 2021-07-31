@@ -15,7 +15,7 @@ public class UnityAdsSub extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setContentView(R.layout.main);
+         setContentView(R.layout.main_activity);
         // Declare a new listener:
         final UnityAdsListener myAdsListener = new UnityAdsListener();
         // Add the listener to the SDK:
