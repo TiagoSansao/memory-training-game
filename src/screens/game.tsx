@@ -67,7 +67,7 @@ export default function game({endListener, lang}) {
 
 
   useEffect(() => {
-    UnityAdsModule.test();
+    console.log(UnityAdsModule);
     retrieveDataFromStorage();
     startNewGame();
   }, [])
