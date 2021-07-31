@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Text, View, SafeAreaView, Dimensions, TouchableHighlight, TouchableOpacity, Alert, NativeModules} from 'react-native';
+import { Text, View, SafeAreaView, DeviceEventEmitter, Dimensions, TouchableHighlight, TouchableOpacity, Alert, NativeModules} from 'react-native';
 import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
 import styles from '../styles/gameStyles';
@@ -25,6 +25,8 @@ export default function game({endListener, lang}) {
   // Sound when player clicks ( X )
   // Intersitial ads ( )
   // Continue from where you stopped using video ads ( )
+  // REMEMBER: showRewarded from NativeModule will show the Ad and all you (me from the future) need to do is to add function: continueFromWhereYouStopped() in Event return;
+
  
   // AsyncStorage.clear(); // For test purposes
 
@@ -52,7 +54,28 @@ export default function game({endListener, lang}) {
   const [circles, setCircles] = useState<number[]>([0,0,0,0,0,0,0,0,0,0]);
   const [gameTimer, setGameTimer]  = useState<number>(0);
   const [statistics, setStatistics] = useState<iStatistics|boolean|any>({});
+  const [rewardedAd, setRewardedAd] = useState<boolean>(false);
 
+  // -------------
+
+  // UnityAdsModule.addEventListener('onReady', placementId => {
+  //       console.log(`Ad with placementId "${placementId}" is ready.`);
+  // });
+
+  // UnityAdsModule.addEventListener('onStart', placementId => {
+  //     console.log(`Ad with placementId "${placementId}" started.`);
+  // });
+
+  // UnityAdsModule.addEventListener('onFinish', (placementId, result) => {
+  //     console.log(JSON.stringify(placementId));
+  //     console.log(JSON.stringify(result));
+  //     console.log(`Ad with placementId ${placementId} finished with result "${result}".`);
+  // });
+
+  // UnityAdsModule.addEventListener('onError', (error, message) => {
+  //     console.log(error);
+  //     console.log(message);
+  // });
 
   // -------------- 
 
@@ -63,15 +86,24 @@ export default function game({endListener, lang}) {
       setGameTimer((gt => gt + 1));
     }, 1000)
     return () => clearInterval(timerInterval);
-  }, [gameTimer, playerTime])
+  }, [gameTimer, playerTime]);
 
 
   useEffect(() => {
-    
+    DeviceEventEmitter.addListener("onFinish", (data) => {
+      const {placementId, result} = data;
+
+      if (placementId !== "rewarded") return;
+
+      if (result === "COMPLETED") return setRewardedAd(true);
+      else if (result === "SKIPPED") return setRewardedAd(false);
+      else return setRewardedAd(false);
+
+    });
 
     retrieveDataFromStorage();
     startNewGame();
-  }, [])
+  }, []);
 
   useEffect(() => {
     return sound ? () => { sound.sound.unloadAsync(); }
@@ -223,9 +255,14 @@ export default function game({endListener, lang}) {
   }
 
   async function lostGame() {
-    UnityAdsModule.displayInterstitial();
+    UnityAdsModule.isReady("interstitial", (result) => {
+      console.log(result);
+      UnityAdsModule.displayInterstitial();
+      console.log("tá pronto");
+    })
+    
     console.log("Executed displayInterstitial()");
-    playAudio('lost', null);
+    // playAudio('lost', null);
     setGameInStorageAndUpdateStatistics(currentSequenceIndex);
     setPlayerTime(false);
     setGameState("lost");

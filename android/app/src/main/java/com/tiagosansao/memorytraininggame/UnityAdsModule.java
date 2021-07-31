@@ -6,11 +6,17 @@ import com.unity3d.ads.UnityAds;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 
 public class UnityAdsModule extends ReactContextBaseJavaModule {
 
@@ -26,6 +32,10 @@ public class UnityAdsModule extends ReactContextBaseJavaModule {
   private Boolean testMode = true;
   private String adUnitId = "interstitial";
 
+  private void sendEvent(String eventName, @Nullable WritableMap params) {
+    getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, params);
+  }
+
   //
 
   @ReactMethod
@@ -35,31 +45,43 @@ public class UnityAdsModule extends ReactContextBaseJavaModule {
     IUnityAdsListener unityAdsListener = new IUnityAdsListener () {
       @Override
       public void onUnityAdsReady (String adUnitId) {
-        // Implement functionality for an ad being ready to show.
-        Toast.makeText(getCurrentActivity(), "Ad ready to show", Toast.LENGTH_SHORT).show();
+        WritableMap params = Arguments.createMap();
+
+        params.putString("placementId", adUnitId);
+
+        sendEvent("onReady", params);
       }
 
       @Override
       public void onUnityAdsStart (String adUnitId) {
-        // Implement functionality for a user starting to watch an ad.
-        Toast.makeText(getCurrentActivity(), "Ad started", Toast.LENGTH_SHORT).show();
+        WritableMap params = Arguments.createMap();
+
+        params.putString("placementId", adUnitId);
+
+        sendEvent("onStart", params);
       }
 
       @Override
       public void onUnityAdsFinish (String adUnitId, UnityAds.FinishState finishState) {
-        // Implement functionality for a user finishing an ad.
-        Toast.makeText(getCurrentActivity(), "Ad Finished", Toast.LENGTH_SHORT).show();
+        WritableMap params = Arguments.createMap();
+
+        params.putString("placementId", adUnitId);
+        params.putString("result", finishState.toString());
+
+        sendEvent("onFinish", params);
       }
 
       @Override
       public void onUnityAdsError (UnityAds.UnityAdsError error, String message) {
-        // Implement functionality for a Unity Ads service error occurring.
-        Toast.makeText(getCurrentActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        WritableMap params = Arguments.createMap();
+
+        params.putString("error", error.toString());
+        params.putString("message", message);
+
+        sendEvent("onError", params);
       }
     };
-    // Add the listener to the SDK:
     UnityAds.addListener(unityAdsListener);
-    // Initialize the SDK:
     UnityAds.initialize (getCurrentActivity(), unityGameID, testMode);
     System.out.println("Initialized successfully");
   }
@@ -72,6 +94,14 @@ public class UnityAdsModule extends ReactContextBaseJavaModule {
         UnityAds.show (getCurrentActivity(), adUnitId);
     }
   }
+
+  @ReactMethod
+  public void isReady(String adUnitId, final Callback callback) {
+    callback.invoke(UnityAds.isReady(adUnitId));
+  }
+
+
+
 
   //
 
