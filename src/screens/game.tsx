@@ -67,7 +67,8 @@ export default function game({endListener, lang}) {
 
 
   useEffect(() => {
-    UnityAdsModule.test();
+    
+
     retrieveDataFromStorage();
     startNewGame();
   }, [])
@@ -222,6 +223,8 @@ export default function game({endListener, lang}) {
   }
 
   async function lostGame() {
+    UnityAdsModule.displayInterstitial();
+    console.log("Executed displayInterstitial()");
     playAudio('lost', null);
     setGameInStorageAndUpdateStatistics(currentSequenceIndex);
     setPlayerTime(false);
