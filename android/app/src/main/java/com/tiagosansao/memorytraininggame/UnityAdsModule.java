@@ -68,6 +68,8 @@ public class UnityAdsModule extends ReactContextBaseJavaModule {
         params.putString("placementId", adUnitId);
         params.putString("result", finishState.toString());
 
+        System.out.println("Emitted onFinish event!");
+
         sendEvent("onFinish", params);
       }
 
@@ -100,7 +102,12 @@ public class UnityAdsModule extends ReactContextBaseJavaModule {
     callback.invoke(UnityAds.isReady(adUnitId));
   }
 
-
+  @ReactMethod
+  public void displayRewarded(String adUnitId) {
+    if (UnityAds.isReady(adUnitId)) {
+      UnityAds.show(getCurrentActivity(), adUnitId);
+    }
+  }
 
 
   //

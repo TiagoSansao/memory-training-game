@@ -56,27 +56,6 @@ export default function game({endListener, lang}) {
   const [statistics, setStatistics] = useState<iStatistics|boolean|any>({});
   const [rewardedAd, setRewardedAd] = useState<boolean>(false);
 
-  // -------------
-
-  // UnityAdsModule.addEventListener('onReady', placementId => {
-  //       console.log(`Ad with placementId "${placementId}" is ready.`);
-  // });
-
-  // UnityAdsModule.addEventListener('onStart', placementId => {
-  //     console.log(`Ad with placementId "${placementId}" started.`);
-  // });
-
-  // UnityAdsModule.addEventListener('onFinish', (placementId, result) => {
-  //     console.log(JSON.stringify(placementId));
-  //     console.log(JSON.stringify(result));
-  //     console.log(`Ad with placementId ${placementId} finished with result "${result}".`);
-  // });
-
-  // UnityAdsModule.addEventListener('onError', (error, message) => {
-  //     console.log(error);
-  //     console.log(message);
-  // });
-
   // -------------- 
 
   useEffect(() => {
@@ -90,14 +69,18 @@ export default function game({endListener, lang}) {
 
 
   useEffect(() => {
-    DeviceEventEmitter.addListener("onFinish", (data) => {
+    DeviceEventEmitter.addListener("onFinish", async (data) => {
       const {placementId, result} = data;
 
-      if (placementId !== "rewarded") return;
-
-      if (result === "COMPLETED") return setRewardedAd(true);
-      else if (result === "SKIPPED") return setRewardedAd(false);
-      else return setRewardedAd(false);
+      if (placementId !== "rewarded_continue") return;
+      console.log(result);
+      if (result === "COMPLETED") {
+        console.log("mexendo aqui");
+        await timer(5000);
+        return startFromWhereUserStopped();
+      }
+      else if (result === "SKIPPED") return;
+      else return;
 
     });
 
@@ -106,6 +89,7 @@ export default function game({endListener, lang}) {
   }, []);
 
   useEffect(() => {
+    console.log("Fonzada");
     return sound ? () => { sound.sound.unloadAsync(); }
       : undefined;
   }, [sound]);
@@ -264,15 +248,21 @@ export default function game({endListener, lang}) {
     highlightSequence(currentSequenceIndex);
   }
 
-  async function lostGame() {
-    // UnityAdsModule.isReady("interstitial", (result) => {
-    //   console.log(result);
-    //   UnityAdsModule.displayInterstitial();
-    //   console.log("tá pronto");
-    // })
-    
-    console.log("Executed displayInterstitial()");
-    // playAudio('lost', null);
+  function isReady(adUnitId) {
+    UnityAdsModule.isReady(adUnitId, (result) => {
+      setRewardedAd(result);
+    })
+  };
+
+  function displayRewardedAd(adUnitId: String) {
+    UnityAdsModule.isReady(adUnitId, (result) => {
+      if (result) UnityAdsModule.displayRewarded(adUnitId);
+    })
+  }
+
+  async function lostGame() {  
+    isReady("rewarded_continue");
+    playAudio('lost', null);
     setGameInStorageAndUpdateStatistics(currentSequenceIndex);
     setPlayerTime(false);
     setGameState("lost");
@@ -430,9 +420,13 @@ export default function game({endListener, lang}) {
             <TouchableOpacity onPress={() => {startNewGame();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>{translate("TRY_AGAIN", lang)}</Text></TouchableOpacity>
             <TouchableOpacity onPress={() => {endListener();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>{translate("HOME", lang)}</Text></TouchableOpacity>
           </View>
-          <View style={styles.endScreenButtonsView}>
-            <TouchableOpacity onPress={() => {startFromWhereUserStopped();}} style={styles.endScreenButtonAd}><Text style={styles.endScreenButtonTxt}>{translate("WATCH_AD", lang)}</Text></TouchableOpacity>
-          </View>
+          { rewardedAd ?
+            <View style={styles.endScreenButtonsView}>
+              <TouchableOpacity onPress={() => {displayRewardedAd("rewarded_continue");}} style={styles.endScreenButtonAd}><Text style={styles.endScreenButtonTxt}>{translate("WATCH_AD", lang)}</Text></TouchableOpacity>
+            </View>
+            :
+            <View><Text>Sim</Text></View>
+          }
           <View style={styles.dataDisplay}>
           {analyticsString(statistics.averageScore, currentSequenceIndex)}
           </View>
