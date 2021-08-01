@@ -3,7 +3,7 @@ const { width, height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
-    marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    // marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     flex: 1,
     backgroundColor: '#1d55f0',
     alignItems: 'center',

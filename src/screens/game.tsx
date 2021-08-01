@@ -25,7 +25,7 @@ export default function game({endListener, lang}) {
   // Sound when player clicks ( X )
   // Intersitial ads ( )
   // Continue from where you stopped using video ads ( )
-  // REMEMBER: showRewarded from NativeModule will show the Ad and all you (me from the future) need to do is to add function: continueFromWhereYouStopped() in Event return;
+// REMEMBER: showRewarded from NativeModule will show the Ad and all you (me from the future) need to do is to add function: continueFromWhereYouStopped() in Event return;
 
  
   // AsyncStorage.clear(); // For test purposes
@@ -254,12 +254,22 @@ export default function game({endListener, lang}) {
     setPlayerTime(true);
   }
 
+  function startFromWhereUserStopped() {
+    setPlayerTime(false);
+    setGameState("in-game");
+    setPlayerSequence([]);
+    setLostTextH1(translate("LOST_MESSAGE", lang));
+    setLostRecord(translate("RECORD", lang));
+    setGameTimer(0);
+    highlightSequence(currentSequenceIndex);
+  }
+
   async function lostGame() {
-    UnityAdsModule.isReady("interstitial", (result) => {
-      console.log(result);
-      UnityAdsModule.displayInterstitial();
-      console.log("tá pronto");
-    })
+    // UnityAdsModule.isReady("interstitial", (result) => {
+    //   console.log(result);
+    //   UnityAdsModule.displayInterstitial();
+    //   console.log("tá pronto");
+    // })
     
     console.log("Executed displayInterstitial()");
     // playAudio('lost', null);
@@ -419,6 +429,9 @@ export default function game({endListener, lang}) {
           <View style={styles.endScreenButtonsView}>
             <TouchableOpacity onPress={() => {startNewGame();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>{translate("TRY_AGAIN", lang)}</Text></TouchableOpacity>
             <TouchableOpacity onPress={() => {endListener();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>{translate("HOME", lang)}</Text></TouchableOpacity>
+          </View>
+          <View style={styles.endScreenButtonsView}>
+            <TouchableOpacity onPress={() => {startFromWhereUserStopped();}} style={styles.endScreenButtonAd}><Text style={styles.endScreenButtonTxt}>{translate("WATCH_AD", lang)}</Text></TouchableOpacity>
           </View>
           <View style={styles.dataDisplay}>
           {analyticsString(statistics.averageScore, currentSequenceIndex)}

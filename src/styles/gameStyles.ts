@@ -10,7 +10,7 @@ export default StyleSheet.create({
     marginBottom: 20,
   },
   container: {
-    marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    // marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     flexDirection: 'column',
     backgroundColor: '#1d55f0',
     width: width,
@@ -90,12 +90,22 @@ export default StyleSheet.create({
   endScreenButtonsView: {
     marginTop: 30,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
+    paddingLeft: 20,
+    paddingRight: 20,
 
   },
   endScreenButton: {
     backgroundColor: 'white',
     width: 120,
+    height: 40,
+    justifyContent: 'center',
+    paddingTop: 5,
+    borderRadius: 0,
+  },
+  endScreenButtonAd: {
+    backgroundColor: 'white',
+    width: "100%",
     height: 40,
     justifyContent: 'center',
     paddingTop: 5,
