@@ -55,8 +55,11 @@ export default function game({endListener, lang}) {
   const [gameTimer, setGameTimer]  = useState<number>(0);
   const [statistics, setStatistics] = useState<iStatistics|boolean|any>({});
   const [rewardedAd, setRewardedAd] = useState<boolean>(false);
+  const [ableToContinue, setAbleToContinue] = useState<boolean>(false);
 
   // -------------- 
+
+  console.log(ableToContinue);
 
   useEffect(() => {
     if (!playerTime) return setGameTimer(0);
@@ -76,8 +79,8 @@ export default function game({endListener, lang}) {
       console.log(result);
       if (result === "COMPLETED") {
         console.log("mexendo aqui");
-        await timer(5000);
-        return startFromWhereUserStopped();
+        setAbleToContinue(true);
+        return;
       }
       else if (result === "SKIPPED") return;
       else return;
@@ -89,7 +92,6 @@ export default function game({endListener, lang}) {
   }, []);
 
   useEffect(() => {
-    console.log("Fonzada");
     return sound ? () => { sound.sound.unloadAsync(); }
       : undefined;
   }, [sound]);
@@ -239,6 +241,7 @@ export default function game({endListener, lang}) {
   }
 
   function startFromWhereUserStopped() {
+    setAbleToContinue(false);
     setPlayerTime(false);
     setGameState("in-game");
     setPlayerSequence([]);
@@ -416,17 +419,23 @@ export default function game({endListener, lang}) {
       { gameState === "lost" && 
         <View style={styles.lostScreen}>
           <Text style={styles.lostTextH1}>{lostTextH1}{"\n"}{currentSequenceIndex} {translate("POINTS", lang)}!</Text>
-          <View style={styles.endScreenButtonsView}>
-            <TouchableOpacity onPress={() => {startNewGame();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>{translate("TRY_AGAIN", lang)}</Text></TouchableOpacity>
-            <TouchableOpacity onPress={() => {endListener();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>{translate("HOME", lang)}</Text></TouchableOpacity>
-          </View>
-          { rewardedAd ?
+          {
+            ableToContinue === false ?
+            <View style={styles.endScreenButtonsView}>
+              <TouchableOpacity onPress={() => {startNewGame();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>{translate("TRY_AGAIN", lang)}</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => {endListener();}} style={styles.endScreenButton}><Text style={styles.endScreenButtonTxt}>{translate("HOME", lang)}</Text></TouchableOpacity>
+            </View> 
+            :
+            <View style={styles.endScreenButtonsView}>
+              <TouchableOpacity onPress={() => {startFromWhereUserStopped();}} style={styles.endScreenButtonAd}><Text style={styles.endScreenButtonTxt}>{translate("WATCH_AD", lang)}</Text></TouchableOpacity>
+            </View> 
+          }
+          { rewardedAd && ableToContinue === false &&
             <View style={styles.endScreenButtonsView}>
               <TouchableOpacity onPress={() => {displayRewardedAd("rewarded_continue");}} style={styles.endScreenButtonAd}><Text style={styles.endScreenButtonTxt}>{translate("WATCH_AD", lang)}</Text></TouchableOpacity>
             </View>
-            :
-            <View><Text>Sim</Text></View>
           }
+          
           <View style={styles.dataDisplay}>
           {analyticsString(statistics.averageScore, currentSequenceIndex)}
           </View>
