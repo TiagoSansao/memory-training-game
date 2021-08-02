@@ -29,7 +29,7 @@ public class UnityAdsModule extends ReactContextBaseJavaModule {
   }
 
   private String unityGameID = "4233797";
-  private Boolean testMode = true;
+  private Boolean testMode = false;
   private String adUnitId = "interstitial";
 
   private void sendEvent(String eventName, @Nullable WritableMap params) {

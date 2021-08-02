@@ -23,8 +23,8 @@ export default function game({endListener, lang}) {
   // Home stylization (X)
   // MULTI-LANGUAGE ( X )
   // Sound when player clicks ( X )
-  // Intersitial ads ( )
-  // Continue from where you stopped using video ads ( )
+  // Rewarded ads ( X )
+  // Continue from where you stopped using video ads ( X )
 // REMEMBER: showRewarded from NativeModule will show the Ad and all you (me from the future) need to do is to add function: continueFromWhereYouStopped() in Event return;
 
  
@@ -58,8 +58,6 @@ export default function game({endListener, lang}) {
   const [ableToContinue, setAbleToContinue] = useState<boolean>(false);
 
   // -------------- 
-
-  console.log(ableToContinue);
 
   useEffect(() => {
     if (!playerTime) return setGameTimer(0);
@@ -296,7 +294,8 @@ export default function game({endListener, lang}) {
   }
 
 
-  function startNewGame() {
+  async function startNewGame() {
+    await timer(500);
     const localSequence:Array<number> = [];
     for(let i = 0; i < 100; i += 1) {
       localSequence.push(Math.floor(Math.random() * 9)); // generate sequence
