@@ -97,7 +97,7 @@ export default StyleSheet.create({
   },
   endScreenButton: {
     backgroundColor: 'white',
-    width: 120,
+    width: "45%",
     height: 40,
     justifyContent: 'center',
     paddingTop: 5,

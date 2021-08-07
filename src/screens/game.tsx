@@ -74,9 +74,7 @@ export default function game({endListener, lang}) {
       const {placementId, result} = data;
 
       if (placementId !== "rewarded_continue") return;
-      console.log(result);
       if (result === "COMPLETED") {
-        console.log("mexendo aqui");
         setAbleToContinue(true);
         return;
       }
@@ -240,6 +238,7 @@ export default function game({endListener, lang}) {
 
   function startFromWhereUserStopped() {
     setAbleToContinue(false);
+    setRewardedAd(false);
     setPlayerTime(false);
     setGameState("in-game");
     setPlayerSequence([]);
